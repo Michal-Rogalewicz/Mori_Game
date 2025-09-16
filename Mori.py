@@ -15,7 +15,7 @@ def print_slow(string):
     for letter in string:
         sys.stdout.write(letter)
         sys.stdout.flush()
-        time.sleep(0.01)
+        time.sleep(0.1)
 
 print_slow(
     "You check the time and realise its late, you start to go back to your car, "
@@ -29,7 +29,7 @@ print_slow(f"\n{name}, your choices now will effect if you make it back to your 
 print_slow("\n\nYou are lost in the forest with darkness surrounding,"
            "the silence of the Mori is engulfing you. You have a path to the left and to your right. ")
 
-start = input("\nDo you take the right or left path? ")
+start = input("\nDo you take the left or right path? ")
 if start == "left":
     print_slow("\nThe path continues going deeper into the Mori forest." 
     "The path seems endless leading you only to a more shallow and dark place.")

@@ -1,6 +1,9 @@
 import sys
 import time
 
+from colorama import Fore, Style
+
+
 def print_slow(string):
     for letter in string:
         sys.stdout.write(letter)
@@ -15,18 +18,18 @@ while True:
         age = int(age)
         break
     else:
-        print_slow("Invalid input. Enter a number.")
+        print("Invalid input. Enter a number.")
 
 if age < 16:
     print_slow(name + " you aren't old enough to play this game")
 else:
-    print("""
-  __  __   ___   ____   ___ 
+    print(Fore.RED + r"""
+ __  __   ___   ____   ___
 |  \/  | / _ \ |  _ \ |_ _|
-| |\/| || | | || |_) | | | 
-| |  | || |_| ||  _ <  | | 
-|_|  |_| \___/ |_| \_\|___|
-""")
+| |\/| || | | || |_) | | |
+| |  | || |_| ||  _ <  | |
+|_|  |_| \___/ |_| \_\|___| 
+""" + Style.RESET_ALL)
 
     print_slow("Welcome to Mori " + name + "\n")
     print("Let's Begin\n")
@@ -34,11 +37,11 @@ else:
     print_slow("""
 "10%"
 "20%"
-"30"
+"30%"
 "40%"
 "50%"
 "60%"
-"70"
+"70%"
 "80%"
 "90%"
 "100%
@@ -54,7 +57,7 @@ else:
     print_slow(f"\n{name}, your choices now will effect if you make it back to your car.")
 
     print_slow("\n\nYou are lost in the forest with darkness surrounding,"
-            "the silence of the Mori is engulfing you. You have a path to the left and to your right. ")
+                "the silence of the Mori is engulfing you. You have a path to the left and to your right. ")
 
     while True:
         start = input("\nDo you take the left or right path? ")
@@ -74,6 +77,11 @@ else:
                 else:
                     print("Invalid input. Please try again.")
                     break
+            while True:
+                    bridge = input("\nDo you inspect the shallow bridge? (yes/no): ")
+                    if path == "no":
+                        print_slow("\nYou inspect under the shallow bridge and find a flashlight with missing batteries.")
+                    break
 
         elif start == "right":
             print_slow("\nThe loud silence of the Mori Forest makes you continue to be anxious,"
@@ -84,4 +92,5 @@ else:
         else:
             print("\nInvalid input. Please type 'left' or 'right'.")
             break
+
 

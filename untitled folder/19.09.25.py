@@ -1,6 +1,9 @@
 import sys
 import time
 
+from colorama import Fore, Style
+
+
 def print_slow(string):
     for letter in string:
         sys.stdout.write(letter)
@@ -20,18 +23,18 @@ while True:
 if age < 16:
     print_slow(name + " you aren't old enough to play this game")
 else:
-    print(r"""
+    print(Fore.RED + r"""
  __  __   ___   ____   ___ 
 |  \/  | / _ \ |  _ \ |_ _|
 | |\/| || | | || |_) | | | 
 | |  | || |_| ||  _ <  | | 
 |_|  |_| \___/ |_| \_\|___|
-""")
+"""+ Style.RESET_ALL)
 
     print_slow("Welcome to Mori " + name + "\n")
     print("Let's Begin\n")
 
-    print_slow("""
+    print_slow(Fore.RED + """
 "10%"
 "20%"
 "30"
@@ -42,7 +45,7 @@ else:
 "80%"
 "90%"
 "100%
-    """)
+    """+ Style.RESET_ALL)
 
     print_slow(
             "\nYou check the time and realise its late, you start to go back to your car, "
@@ -66,27 +69,48 @@ else:
             while True:
                 path = input("\nDo you go back? (yes/no): ")
                 if path == "yes":
-                    print_slow("\nYou return to the first two paths fatigued by the Mori Forest.")
-                    break
-                elif path == "no":
+                    print_slow("\nWhile walking back you spot something shining in the tall grass of the Mori Forest")
+
+                    flashlight = input("\nDo you check the long grass? (yes/no): ")
+                    if flashlight == "yes":
+                        print_slow("\nYou put your hand in the long grass trying to get a hold of the shiny object that you spotted."
+                                   "Searching.....with your hand..... you find.......... some used batteries.")
+                        print_slow("\nYou continue on which leads you to a old shallow bridge.")
+                        break
+
+                    elif flashlight == "no":
+                        print_slow("You continue on which leads you to a old shallow bridge")
+                        break
+                    else:
+                        print("Invalid input. Please try again.")
+                        break
+
+                if path == "no":
                     print_slow("\nYou continue on which leads you to a old shallow bridge.")
                     break
+
                 else:
                     print("Invalid input. Please try again.")
+
                     break
             while True:
-                    bridge = input("\nDo you inspect the shallow bridge? (yes/no): .")
-                    if path == "no":
-                        print_slow("\nYou inspect under the shallow bridge and find a flashlight with missing batteries .")
-                    break
-
+                    bridge = input("\nDo you inspect the shallow bridge? (yes/no): ")
+                    if path == "yes":
+                        print_slow("\nYou inspect under the shallow bridge and find a flashlight with missing batteries." 
+                                   "You continue on treading through the Mori Forest")
+                        break
+                    elif path == "no":
+                        print_slow("\nYou continue on treading through the Mori Forest.")
+                        break
 
         elif start == "right":
             print_slow("\nThe loud silence of the Mori Forest makes you continue to be anxious,"
                     "by each second going deeper into the Mori Forest. You hear a river nearby,"
                     "the soothing sound of waves makes you feel at peace calming your nerves.")
+
             print_slow("\nYou go towards the soothing sound of the river.")
             break
+
         else:
             print("\nInvalid input. Please type 'left' or 'right'.")
             break

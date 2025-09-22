@@ -3,7 +3,6 @@ import time
 
 from colorama import Fore, Style
 
-
 def print_slow(string):
     for letter in string:
         sys.stdout.write(letter)
@@ -37,11 +36,11 @@ else:
     print_slow(Fore.RED + """
 "10%"
 "20%"
-"30"
+"30%"
 "40%"
 "50%"
 "60%"
-"70"
+"70%"
 "80%"
 "90%"
 "100%
@@ -63,15 +62,15 @@ else:
         start = input("\nDo you take the left or right path? ")
 
         if start == "left":
-            print_slow("\nThe path continues going deeper into the Mori forest." 
+            print_slow("\n The path continues going deeper into the Mori forest." 
                 "The path seems endless leading you only to a more shallow and dark place.")
 
             while True:
-                path = input("\nDo you go back? (yes/no): ")
+                print_slow("\nWhile walking you spot something shining in the tall grass of the Mori Forest")
+                path = input("\nDo you stop? (yes/no): ")
                 if path == "yes":
-                    print_slow("\nWhile walking back you spot something shining in the tall grass of the Mori Forest")
+                    flashlight = input("\nAre you sure to check the long grass? (yes/no): ")
 
-                    flashlight = input("\nDo you check the long grass? (yes/no): ")
                     if flashlight == "yes":
                         print_slow("\nYou put your hand in the long grass trying to get a hold of the shiny object that you spotted."
                                    "Searching.....with your hand..... you find.......... some used batteries.")
@@ -81,6 +80,7 @@ else:
                     elif flashlight == "no":
                         print_slow("You continue on which leads you to a old shallow bridge")
                         break
+
                     else:
                         print("Invalid input. Please try again.")
                         break
@@ -91,17 +91,43 @@ else:
 
                 else:
                     print("Invalid input. Please try again.")
-
                     break
+
             while True:
                     bridge = input("\nDo you inspect the shallow bridge? (yes/no): ")
                     if path == "yes":
                         print_slow("\nYou inspect under the shallow bridge and find a flashlight with missing batteries." 
-                                   "You continue on treading through the Mori Forest")
+                        "You continue on treading through the Mori Forest")
                         break
+
                     elif path == "no":
                         print_slow("\nYou continue on treading through the Mori Forest.")
                         break
+
+                    else:
+                        print_slow("Invalid input. Please try again.")
+                        break
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         elif start == "right":
             print_slow("\nThe loud silence of the Mori Forest makes you continue to be anxious,"
@@ -113,7 +139,3 @@ else:
 
         else:
             print("\nInvalid input. Please type 'left' or 'right'.")
-            break
-
-
-        

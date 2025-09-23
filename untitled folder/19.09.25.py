@@ -6,27 +6,28 @@ def print_slow(string):
     for letter in string:
         sys.stdout.write(letter)
         sys.stdout.flush()
-        time.sleep(0.0001)
+        time.sleep(0.1)         #change always when testing to 0.0001
 
 def left_path():
 
-    print_slow("\n The path continues going deeper into the Mori forest." 
-            "The path seems endless leading you only to a more shallow and dark place.")
+    print_slow("\nThe path continues going deeper into the Mori forest." 
+               "\nThe path seems endless leading you only to a more shallow and dark place.")
 
     has_batteries = False
 
     while True:
+        print_slow("\nWhile walking you spot something shining in the tall grass of the Mori Forest.")
         path = input("\nDo you stop? (yes/no): ")
         if path == "yes":
-            print_slow("\nWhile walking back you spot something shining in the tall grass of the Mori Forest.")
             flashlight = input("\nDo you check the long grass? (yes/no): ")
             if flashlight == "yes":
-                print_slow("\nSearching.....with your hand..... you find.......... some used batteries.")
+                print_slow("\nSearching.....with your hand......you find...........some used batteries.")
                 has_batteries = True
-                print_slow("\nYou continue on which leads you to an old shallow bridge.")
+                print_slow("\nAfter finding the batteries,"
+                           "\nYou continue on which leads you to an old shallow bridge.")
                 break
             elif flashlight == "no":
-                print_slow("You continue on which leads you to a old shallow bridge")
+                print_slow("\nYou continue on which leads you to a old shallow bridge")
                 break
             else:
                 print("Invalid input. Please try again.")
@@ -40,12 +41,12 @@ def left_path():
             continue
 
     while True:
-        bridge = input("\nDo you inspect the shallow bridge? (yes/no): ")
+        bridge = input("\nDo you explore the shallow bridge? (yes/no): ")
         if bridge == "yes":
             if has_batteries:
-                print_slow("\nYou inspect under the shallow bridge and in a swamp of dirt with a grotesque smell, "
-                        "you search finding a flashlight with missing batteries." 
-                        "\nYou have the batteries, the stenching flashlight now works. This might come in handy late for you")
+                print_slow("\nYou explore under the shallow bridge and in a swamp of dirt with a grotesque smell, "
+                           "while holding your nose you search the swamp finding a flashlight with missing batteries." 
+                           "\nYou have the batteries, the stenching flashlight now works. This might come in handy late for you")
                 break
 
         elif bridge == "no":
@@ -58,19 +59,37 @@ def left_path():
 
         return has_batteries
 
+ #after name, once you thought of a way to use has_batteries enter it after like this: (name, has_batteries)
+
+def left_path2(name):
+    print_slow(f"\n{name}With the flashlight you go deeper into the Mori Forest. "
+               "Not knowing where you are or what time it even is"
+               "You continue hoping you can make it out of the Mori Forest. ")
+
+
+        #add more loops here and dialogues to continue the story
+
+
 def right_path():
     print_slow("\nThe loud silence of the Mori Forest makes you continue to be anxious,"
-                    "by each second going deeper into the Mori Forest. You hear a river nearby,"
-                    "the soothing sound of waves makes you feel at peace calming your nerves.")
+                       "by each second going deeper into the Mori Forest. You hear a river nearby,"
+                       "the soothing sound of water calms you.")
     print_slow("\nYou go towards the soothing sound of the river.")
 
+    while True:
+        sign = input("\nYou see a fallen sign next to the river. Do you read it? (yes/no): ")
+        if sign == "yes":
+            print_slow("\nThe sign is old and rusty barely being to read the sign you can recognise only some letters."
+            "\n\nThe sign says B..W..RE  OF  T..E   M..RI   F..R..S..T")
+            print_slow("\nDisturbed you continue walking following the water.")
+            break
+        elif sign == "no":
+            print_slow("\nYou ignore the sign and continue walking following the water.")
+            break
+        else:
+            print("Invalid input. Please try again.")
+
     return False
-
-def left_path2(name, has_batteries):
-    print_slow("\nWith the flashlight you go deeper into the Mori Forest. "
-               "Not knowing where you are or what time it even is"
-               "You continue jhk"
-
 
 def start():
     name = input("\nWhat is your name? ")
@@ -88,14 +107,14 @@ def start():
 
     print("\nVERIFICATION COMPLETE.")
     print(Fore.RED + r"""
-                                                    __  __   ___   ____   ___
-                                                   |  \/  | / _ \ |  _ \ |_ _|
-                                                   | |\/| || | | || |_) | | |
-                                                   | |  | || |_| ||  _ <  | |
-                                                   |_|  |_| \___/ |_| \_\|___|
+                                                                                                                         __  __   ___   ____   ___
+                                                                                                                        |  \/  | / _ \ |  _ \ |_ _|
+                                                                                                                        | |\/| || | | || |_) | | |
+                                                                                                                        | |  | || |_| ||  _ <  | |
+                                                                                                                        |_|  |_| \___/ |_| \_\|___|
     """ + Style.RESET_ALL)
 
-    print_slow("Welcome to Mori" + name + "\n")
+    print_slow("Welcome to Mori, " f"{name}" + "\n")
     print("Lets Begin\n")
 
     print_slow(Fore.RED + """
@@ -129,5 +148,5 @@ def start():
         else:
             print("\nInvalid input. Please type 'left' or 'right'.")
 
-    if __name__ == "__main__":
-        start()
+if __name__ == "__main__":
+    start()

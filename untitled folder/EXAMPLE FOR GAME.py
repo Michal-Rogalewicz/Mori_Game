@@ -12,10 +12,7 @@ def print_slow(string, delay=0.02):
         sys.stdout.write("\n")
 
 def handle_left():
-    """
-    Left path logic.
-    Returns True if the player picked up batteries, otherwise False.
-    """
+
     print_slow("\nThe path continues going deeper into the Mori forest. "
                "The path seems endless leading you to a more shallow and dark place.")
 
@@ -47,7 +44,7 @@ def handle_left():
 
     # Bridge inspection
     while True:
-        bridge = input("\nDo you inspect the shallow bridge? (yes/no): ").strip().lower()
+        bridge = input("\nDo you inspect the shallow bridge? (yes/no): ")
         if bridge in ("yes", "y"):
             if has_batteries:
                 print_slow("\nYou inspect under the shallow bridge and find a flashlight (it needs batteries). "
@@ -55,6 +52,7 @@ def handle_left():
             else:
                 print_slow("\nYou inspect under the shallow bridge and find a flashlight with missing batteries.")
             break
+
         elif bridge in ("no", "n"):
             print_slow("\nYou continue on treading through the Mori Forest.")
             break

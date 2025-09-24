@@ -21,7 +21,7 @@ def left_path():
         if path == "yes":
             flashlight = input("\nDo you check the long grass? (yes/no): ")
             if flashlight == "yes":
-                print_slow("\nSearching.....with your hand......you find...........some used batteries.")
+                print_slow("\nSearching.....with your hand......you find....................some used batteries.")
                 has_batteries = True
                 print_slow("\nAfter finding the batteries,"
                            "\nYou continue on which leads you to an old shallow bridge.")
@@ -46,7 +46,7 @@ def left_path():
             if has_batteries:
                 print_slow("\nYou explore under the shallow bridge and in a swamp of dirt with a grotesque smell, "
                            "while holding your nose you search the swamp finding a flashlight with missing batteries." 
-                           "\nYou have the batteries, the stenching flashlight now works. This might come in handy late for you")
+                           "\nYou have the batteries, the stenching flashlight now works. This might come in handy later for you.")
                 break
 
         elif bridge == "no":
@@ -81,18 +81,41 @@ def right_path():
         if sign == "yes":
             print_slow("\nThe sign is old and rusty barely being to read the sign you can recognise only some letters."
             "\n\nThe sign says B..W..RE  OF  T..E   M..RI   F..R..S..T")
-            print_slow("\nDisturbed you continue walking following the water.")
+            print_slow("\nDisturbed you continue walking following the current of the river")
             break
         elif sign == "no":
-            print_slow("\nYou ignore the sign and continue walking following the water.")
+            print_slow("\nYou ignore the sign and continue walking following the current of the river.")
             break
         else:
             print("Invalid input. Please try again.")
 
+        while True:
+            current = input("\nAfter following the current you get to the end, finding a rusty farmhouse"
+                            "Do you enter the farmhouse by the barn or the main door? (barn/main door): ")
+            if current == "barn":
+                print_slow("\You enter the barn, the mud swarms your feet making each step of your's heavy"
+                           "\nThe mud sticks your attention")
+                print(".....*creak*.....")
+                print("What was that?")
+                print_slow("..........")
+                print_slow("You look around searching for the sound")
+
+
+                break
+            elif current == "main door":
+                print_slow("\nYou enter the pitch black farmhouse, you stand still...\n"
+                           "the farmhouse is filled with a loud silence")
+                break
+            else:
+                print("Invalid input. Please try again.")
+
+
+
+
     return False
 
 def start():
-    name = input("\nWhat is your name? ")
+    name = input("What is your name? ")
     while True:
         age = input("\nWhat is your age? ")
         if age.isdigit():

@@ -6,7 +6,7 @@ def print_slow(string):
     for letter in string:
         sys.stdout.write(letter)
         sys.stdout.flush()
-        time.sleep(0.0001)         #change always when testing to 0.0001
+        time.sleep(0.1)         #change always when testing to 0.0001
 
 def left_path():
 
@@ -80,34 +80,34 @@ def right_path():
         sign = input("\nYou see a fallen sign next to the river. Do you read it? (yes/no): ")
         if sign == "yes":
             print_slow("\nThe sign is old and rusty barely being to read the sign you can recognise only some letters."
-                       "\n\nThe sign says ")
-            print_slow(Fore.RED + "B..W..RE  OF  T..E   M..RI   F..R..S..T" + Style.RESET_ALL)
-            print_slow("\nDisturbed you continue walking following the current of the river.")
+            "\n\nThe sign says B..W..RE  OF  T..E   M..RI   F..R..S..T")
+            print_slow("\nDisturbed you continue walking following the current of the river")
             break
         elif sign == "no":
             print_slow("\nYou ignore the sign and continue walking following the current of the river.")
             break
         else:
             print("Invalid input. Please try again.")
-            continue
 
-    while True:
-        current = input("\nAfter following the current you get to the end, finding a rusty farmhouse."
-                        "\nDo you enter the farmhouse by the barn or the main door? (barn/main door): ")
-        if current == "barn":
-            print_slow("You enter the barn, the mud swarms your feet making each step of your's heavy."
-                       "\nThe mud sticks your attention")
-            print(Fore.RED + "\n\n.....*creak*....." + Style.RESET_ALL)
-            print("\nWhat was that?")
-            print_slow("\n.....*silence*.....")
-            print_slow("\n\nYou look around searching for the sound")
-            break
-        elif current == "main door":
-            print_slow("\nYou enter the pitch black farmhouse, you stand still..."
-                       "\nThe farmhouse is filled with a loud silence.")
-            break
-        else:
-            print("Invalid input. Please try again.")
+        while True:
+            current = input("\nAfter following the current you get to the end, finding a rusty farmhouse"
+                            "Do you enter the farmhouse by the barn or the main door? (barn/main door): ")
+            if current == "barn":
+                print_slow("\You enter the barn, the mud swarms your feet making each step of your's heavy"
+                           "\nThe mud sticks your attention")
+                print(".....*creak*.....")
+                print("What was that?")
+                print_slow("..........")
+                print_slow("You look around searching for the sound")
+
+
+                break
+            elif current == "main door":
+                print_slow("\nYou enter the pitch black farmhouse, you stand still...\n"
+                           "the farmhouse is filled with a loud silence")
+                break
+            else:
+                print("Invalid input. Please try again.")
 
 
 
@@ -164,6 +164,9 @@ def start():
         start1 = input("\nDo you take the left or right path? (left/right): ")
         if start1 == "left":
             has_batteries = left_path()
+            break
+        elif start1 == "right":
+            has_batteries = right_path()
             break
         else:
             print("\nInvalid input. Please type 'left' or 'right'.")

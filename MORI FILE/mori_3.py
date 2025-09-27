@@ -8,25 +8,48 @@ def print_slow(string):
         sys.stdout.flush()
         time.sleep(0.0001)         #change always when testing to 0.0001
 
-def left_path():
+def show_inventory(inventory):
+    if inventory:
+        print_slow(f"\nInventory: {', '.join(sorted(inventory))}\n")
+    else:
+        print_slow("\nInventory:  (empty)\n")
+
+def ask (prompt):
+    """Lets player check inventory."""
+    while True:
+        choice = input(prompt)
+        if choice in {'i',"inventory"}:
+            return "_SHOWN_INVENTORY_"
+        return choice
+
+def left_path(inventory):
 
     print_slow("\nThe path continues going deeper into the Mori forest." 
                "\nThe path seems endless leading you only to a more shallow and dark place.")
 
-    has_batteries = False
-
     while True:
         print_slow("\nWhile walking you spot something shining in the tall grass of the Mori Forest.")
-        path = input("\nDo you stop? (yes/no): ")
+        path = ask("\nDo you stop? (yes/no): ")
+
+        if path == "_SHOWN_INVENTORY_":
+            show_inventory(inventory)
+            continue
+
         if path == "yes":
-            flashlight = input("\nDo you check the long grass? (yes/no): ")
-            if flashlight == "yes":
-                print_slow("\nSearching.....with your hand......you find....................some used batteries.")
-                has_batteries = True
-                print_slow("\nAfter finding the batteries,"
-                           "\nYou continue on which leads you to an old shallow bridge.")
-                break
-            elif flashlight == "no":
+            batteries = ask("\nDo you check the long grass? (yes/no): ")
+            if batteries == "_SHOWN_INVENTORY_":
+                show_inventory(inventory)
+                continue
+
+            if batteries ==  "yes":
+                if "batteries" not in inventory:
+                    print_slow("\nSearching.....with your hand......you find....................some used batteries.")
+                    inventory.add("batteries")
+                else:
+                    print_slow("\nAfter finding the batteries,"
+                               "\nYou continue on which leads you to an old shallow bridge.")
+                    break
+            elif batteries == "no":
                 print_slow("\nYou continue on which leads you to a old shallow bridge")
                 break
             else:
@@ -41,44 +64,109 @@ def left_path():
             continue
 
     while True:
-        bridge = input("\nDo you explore the shallow bridge? (yes/no): ")
+        bridge = ask("\nDo you explore the shallow bridge? (yes/no): ")
+
+        if bridge == "_SHOWN_INVENTORY_":
+            show_inventory(inventory)
+            continue
+
         if bridge == "yes":
-            if has_batteries:
-                print_slow("\nYou explore under the shallow bridge and in a swamp of dirt with a grotesque smell, "
-                           "while holding your nose you search the swamp finding a flashlight with missing batteries." 
-                           "\nYou have the batteries, the stenching flashlight now works. This might come in handy later for you.")
-                break
+            print_slow("\nYou explore under the shallow bridge and in a swamp of dirt with a grotesque smell, "
+                       "while holding your nose you search the swamp finding a flashlight with missing batteries.")
+
+            if "flashlight" not in inventory:
+                inventory.add("flashlight")
+                print_slow("\nYou take the stenching flashlight")
+
+            elif "batteries" in inventory and "flashlight" not in inventory:
+                inventory.discard("flashlight")
+                inventory.discard("batteries")
+                inventory.add("flashlight")
+                print_slow("\nYou have the batteries, the stenching flashlight now works. This might come in handy later for you.")
+
+            break
 
         elif bridge == "no":
             print_slow("\nYou continue on treading through the Mori Forest.")
             break
-
         else:
             print_slow("Invalid input. Please try again.")
             break
 
-        return has_batteries
+    return inventory
 
- #after name, once you thought of a way to use has_batteries enter it after like this: (name, has_batteries)
+def left_path2(name,inventory):
+    print_slow(f"\n{name} you go deeper into the Mori Forest. "
+               "The air grows colder, you can tell its very late. "
+               "Just hoping you can make it out")
 
-def left_path2(name):
-    print_slow(f"\n{name}With the flashlight you go deeper into the Mori Forest. "
-               "Not knowing where you are or what time it even is"
-               "You continue hoping you can make it out of the Mori Forest. ")
+    if "working flashlight" in inventory:
+        print_slow("\nThe working flashlight cuts through the darkness of the Mori Forest. "
+                   "You spot with your flashlight claw mark along the trees. Something has been here recently."
+                   "\nThe trail of claw marks continue, daring you to follow...")
+        claw = ask("\nDo you follow the claw marks or ignore them? (follow/ignore): ")
+        if claw == "follow":
+            print_slow("\nYou follow the claw marks and with each step the marks grow fresher. Suddenly, you hear rustling. "
+                       "Your grip tightens on the flashlight. ")
+        elif claw == "ignore":
+            print_slow("\nYou choose not to tempt your own fate, walking away from the claw marked trail"
+                       "The Mori Forest grows eerily quiet as you continue forward. ")
 
+    elif "flashlight" in inventory:
+        print_slow("You walk on with the non-working flashlight, clicking it again and again. "
+                   "Its nothing more than just dead weight. ")
 
-        #add more loops here and dialogues to continue the story
+    else:
+        print_slow("\nYou stumble blindly in the darkness of the Mori Forest. Branches claw at your arms,"
+                   "and with each step feeling like it could lead you to a drop"
+                   "The Mori Forest whispers around you, but you can't tell if its the wind... or the voices. ")
 
+        choice = ask("\nDo you keep moving forward or try searching around you for something that can be useful to you? (forward/search): ")
+
+        if choice == "_SHOWN_INVENTORY_":
+            show_inventory(inventory)
+            return left_path2(name, inventory)
+
+        if choice == "forward":
+            print_slow("\nYou grit your teeth and press on, but each step sinks deeper into the mud. "
+                       "Your heartbeat drowns out the silence of the Mori Forest. ")
+
+            print_slow("\nYou keep on walking forward hoping you will spot some light")
+            print_slow(Fore.RED +"\nYou trip"+ Style.RESET_ALL)
+            print_slow(Fore.RED + "\n......." + Style.RESET_ALL)
+            print_slow("\nYou look behind you" 
+                       "\nTrying to view what made you trip" )
+            print_slow("\nA bag"
+                       "\nYou check inside the bag"
+                       "\nTo find a small pocket knife and some damp matches")
+            if "pocket knife" not in inventory:
+                inventory.add("pocket knife")
+                print_slow("You have now a pocket knife")
+
+        elif choice == "search":
+            print_slow("\nYou search around with your hands touching anything that resembles a item"
+                       "You find some material, "
+                       "it looks like some cloth and there is something written on it but you can't tell what in this darkness")
+
+            if "strange cloth" not in inventory:
+                inventory.add("strange cloth")
+                print_slow("\nYou keep the strange cloth, though it's meaning is unclear")
+
+    return inventory #continue on more with your code
 
 def right_path():
     print_slow("\nThe loud silence of the Mori Forest makes you continue to be anxious,"
-                       "by each second going deeper into the Mori Forest. You hear a river nearby,"
-                       "the soothing sound of water calms you.")
+               "by each second going deeper into the Mori Forest. You hear a river nearby,"
+               "the soothing sound of water calms you.")
     print_slow("\nYou go towards the soothing sound of the river.")
 
-
     while True:
-        sign = input("\nYou see a fallen sign next to the river. Do you read it? (yes/no): ")
+        sign = ask("\nYou see a fallen sign next to the river. Do you read it? (yes/no): ")
+
+        if sign == "_SHOWN_INVENTORY_":
+            show_inventory(inventory)
+            continue
+
         if sign == "yes":
             print_slow("\nThe sign is old and rusty barely being to read the sign you can recognise only some letters."
                        "\n\nThe sign says ")
@@ -91,9 +179,13 @@ def right_path():
         else:
             print("Invalid input. Please try again.")
 
-        while True:
-            current = input("\nAfter following the current you get to the end, finding a rusty farmhouse."
-                        "\nDo you enter the farmhouse by the barn or the main door? (barn/main_door): ")
+    while True:
+            current = ask("\nAfter following the current you get to the end, finding a rusty farmhouse."
+                          "\nDo you enter the farmhouse by the barn or the main door? (barn/main_door): ")
+
+            if current == "_SHOWN_INVENTORY_":
+                show_inventory(inventory)
+                continue
 
             if current == "barn":
                     print_slow("You enter the barn, the mud swarms your feet making each step of your's heavy."
@@ -101,21 +193,50 @@ def right_path():
                     print(Fore.RED + "\n\n.....*creak*....." + Style.RESET_ALL)
                     print("\nWhat was that?")
                     print_slow("\n.....*silence*.....")
-                    print_slow("\n\nYou look around searching for the sound")
-                    break
+                    print_slow("\n\nYou look around searching for the sound"
+                               "Nothing")
+                    print_slow("\nWhile searching you see something hidden in a pile of hay"
+                               "Inside lays a small wooden box, long forgotten")
+
+                    open_box = ask("\nDo you open the small wooden box? (yes/no): ")
+                    if open_box == "_SHOWN_INVENTORY_":
+                        show_inventory(inventory)
+                        continue
+
+                    if open_box == "yes":
+                        if "lighter" not in inventory:
+                            print_slow("Inside you find a lighter, it looks well kept, "
+                                       "it must of been special to someone. ")
+                            inventory.add("lighter")
+                            print_slow("\nYou have now a lighter" )
+                            break
+                    elif open_box == "no":
+                        print_slow("You leave the box shut")
+                        break
+                    else:
+                        print_slow("\nInvalid input. Please try again.")
+                    continue
 
             elif current == "main_door":
                     print_slow("\nYou enter the pitch black farmhouse, you stand still..."
                                "\nThe farmhouse is filled with a loud silence.")
-                    setting = input("Something is in here with you"
-                                        "Do you run out of the farmhouse or face the mystery that awaits you: (run/face)")
+                    setting = ask("Something is making a noise"
+                                  "Do you run out of the farmhouse or face the mystery that awaits you: (run/face)")
+
+                    if setting == "_SHOWN_INVENTORY_":
+                        show_inventory(inventory)
+                        continue
+
                     if setting == "run":
-                       print_slow("\nYou try to run but the mud slows you down, "
-                                   "making you trip hitting the mud face first")
+                       print_slow("\nYou run out of the farmhouse")  #change this bit cause it don't really make sense
                        break
                     elif setting == "face":
-                        print_slow("\n")
-                        break
+                        if "lantern" not in inventory:
+                            print_slow("\nYou face the sound creeping towards it ")
+                            print_slow("\nA oil lantern dangling from a coat rack, being swayed gently by the wind. "
+                                       "You take it with you. ")
+                            inventory.add("lantern")
+                            print_slow("\nYou now have a lantern")
                     else:
                         print("Invalid input. Please try again.")
             else:
@@ -171,15 +292,23 @@ def start():
     print_slow(f"\n{name}, your choices now will effect if you make it back to your car.")
 
     while True:
-        start1 = input("\nDo you take the left or right path? (left/right): ")
+        start1 = ask("\nDo you take the left or right path? (left/right): ")
+        if start1 == "_SHOWN_INVENTORY_":
+            print_slow("\nInventory: (empty)\n")
+            continue
+
         if start1 == "left":
-            has_batteries = left_path()
-            if has_batteries:
-                left_path2(name)
+            inventory_left = set()
+            inventory_left = left_path(inventory_left)
+            if "working flashlight" in inventory_left:
+                left_path2(name, inventory_left)
             break
+
         elif start1 == "right":
-            has_batteries = right_path()
+            inventory_right = set()
+            inventory_right = right_path(inventory_right)
             break
+
         else:
             print("\nInvalid input. Please type 'left' or 'right'.")
 

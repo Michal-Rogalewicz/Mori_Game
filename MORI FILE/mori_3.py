@@ -165,8 +165,8 @@ def right_path(inventory):
             print("Invalid input. Please try again.")
 
     while True:
-            current = ask("\nAfter following the current you get to the end, finding a rusty farmhouse."
-                          "\nDo you enter the farmhouse by the barn or the main door? (barn/main_door): ")
+            print_slow("\nAfter following the current you get to the end, finding a rusty farmhouse.")
+            current = ask("\nDo you enter the farmhouse by the barn or the main door? (barn/main_door): ")
 
             if current == "barn":
                     print_slow("You enter the barn, the mud swarms your feet making each step of your's heavy."
@@ -203,27 +203,27 @@ def right_path(inventory):
 
                     if main == "run":
                         print_slow("\nYou try to run but the mud makes your steps heavy making you trip, "
-                                   "making you hit the mud face first")
+                                   "making you hit the mud face first." )
                         continue
 
                     elif main == "face":
                         if "lantern" not in inventory:
                             print_slow("\nYou face the the mystery,"
-                                       "just to see a dented lantern swaying gently from a coat rack")
+                                       "just to see a dented lantern swaying gently from a coat rack." )
                             inventory.add("lantern")
-                            print_slow("\nYou now have a lantern")
+                            print_slow("\nYou now have a lantern." )
 
                         if not lantern_lit and "lantern" in inventory:
                             if "lighter" in inventory:
-                                lighter = ask("Light the lantern with the lighter? yes/no: ")
-                                if lighter = "yes"
-                                lantern_lit = True
-                                print_slow("\nThe lamp's light pushes back the dark")
+                                lighter_answer = ask("Light the lantern with the lighter? (yes/no): ", inventory)
+                                if lighter_answer == "yes":
+                                   lantern_lit = True
+                                   print_slow("\nThe lamp's light pushes back the dark" )
                         else:
-                            print_slow("\nYou need something to ignite the lamp")
+                            print_slow("\nYou need something to ignite the lamp" )
 
-                    print_slow("\nWith the lamp you delve deeper into the house, through the eerie hall,  "
-                               "which leads you to discover an old office")
+                    print_slow("\nWith the lamp you delve deeper into the house, through the eerie hall, "
+                               "which leads you to discover an old office." )
 
                     if lantern_lit:
                         if "map" not in inventory:
@@ -244,7 +244,6 @@ def right_path(inventory):
                                    " Following the map heading towards the Mill Tunnel.")
                         return inventory
                     continue
-
             else:
                 print("\nInvalid input. Please try again.")
                 continue

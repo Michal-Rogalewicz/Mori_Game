@@ -17,15 +17,18 @@ def show_inventory(inventory):
 def ask(prompt, inventory = None):
     while True:
         choice = input(prompt)
+
         if choice in ('i', 'inventory'):
             if inventory is not None:
                 show_inventory(inventory)
             else:
                 print_slow("\nInventory:  (empty)\n")
             continue
-        return choice
 
-def left_path(inventory):
+        if choice:
+            return choice
+
+def left_path(name, inventory):
 
     print_slow("\nThe path continues going deeper into the Mori forest." 
                "\nThe path seems endless leading you only to a more shallow and dark place.")
@@ -80,9 +83,10 @@ def left_path(inventory):
             print_slow("\nYou continue on treading through the Mori Forest. ")
             break
         else:
-            print_slow("Invalid input. Please try again. ")
+            print("Invalid input. Please try again. ")
             break
 
+    inventory = left_path2(name, inventory)
     return inventory
 
 def left_path2(name, inventory):
@@ -90,7 +94,7 @@ def left_path2(name, inventory):
                "The air grows colder, you can tell its very late. "
                "Just hoping you can make it out")
 
-    if "working flashlight" in inventory:
+    if "stenching flashlight" in inventory:
         print_slow("\nThe working flashlight cuts through the darkness of the Mori Forest. "
                    "You spot with your flashlight claw mark along the trees. Something has been here recently."
                    "\nThe trail of claw marks continue, daring you to follow...")
@@ -99,8 +103,8 @@ def left_path2(name, inventory):
             print_slow("\nYou follow the claw marks and with each step the marks grow fresher. Suddenly, you hear rustling. "
                        "Your grip tightens on the flashlight. ")
         elif claw == "ignore":
-            print_slow("\nYou choose not to tempt your own fate, walking away from the claw marked trail"
-                       "The Mori Forest grows eerily quiet as you continue forward. ")
+            print_slow("\nYou choose not to tempt your own fate, walking away from the claw marked trail "
+                       "\nThe Mori Forest grows eerily quiet as you continue forward. ")
         else:
             print("Invalid input. Please try again.")
 
@@ -110,7 +114,7 @@ def left_path2(name, inventory):
 
     else:
         print_slow("\nYou stumble blindly in the darkness of the Mori Forest. Branches claw at your arms,"
-                   "and with each step feeling like it could lead you to a drop"
+                   "and with each step feeling like it could lead you to a drop. "
                    "The Mori Forest whispers around you, but you can't tell if its the wind... or the voices. ")
 
         choice = ask("\nDo you keep moving forward or try searching around you for something that can be useful to you? (forward/search): ", inventory)
@@ -119,25 +123,27 @@ def left_path2(name, inventory):
             print_slow("\nYou grit your teeth and press on, but each step sinks deeper into the mud. "
                        "Your heartbeat drowns out the silence of the Mori Forest. ")
 
-            print_slow("\nYou keep on walking forward hoping you will spot some light")
+            print_slow("\nYou keep on walking forward hoping you will spot some light. ")
             print_slow(Fore.RED +"\nYou trip"+ Style.RESET_ALL)
             print_slow(Fore.RED + "\n......." + Style.RESET_ALL)
             print_slow("\nYou look behind you" 
                        "\nTrying to view what made you trip" )
             print_slow("\nA bag"
                        "\nYou check inside the bag"
-                       "\nTo find a small pocket knife and some damp matches")
+                       "\nTo find a small pocket knife and some damp matches. ")
             if "pocket knife" not in inventory:
                 inventory.add("pocket knife")
-                print_slow("You now have a pocket knife")
+                print_slow("You now have a pocket knife. ")
         elif choice == "search":
-            print_slow("\nYou search around with your hands touching anything that resembles a item"
+            print_slow("\nYou search around with your hands touching anything that resembles a item. "
                        "You find some material, "
-                       "it looks like some cloth and there is something written on it but you can't tell what in this darkness")
+                       "it looks like some cloth and there is something written on it but you can't tell what in this darkness. ")
 
             if "strange cloth" not in inventory:
                 inventory.add("strange cloth")
-                print_slow("\nYou keep the strange cloth, though it's meaning is unclear")
+                print_slow("\nYou keep the strange cloth, though it's meaning is unclear. ")
+        else:
+            print("Invalid input. Please try again.")
 
     return inventory #continue on more with your code
 
@@ -165,7 +171,7 @@ def right_path(inventory):
             print("Invalid input. Please try again.")
 
     while True:
-            print_slow("\nAfter following the current you get to the end, finding a rusty farmhouse.")
+            print_slow("\nYou get to the end, finding a rusty farmhouse.")
             current = ask("\nDo you enter the farmhouse by the barn or the main door? (barn/main_door): ")
 
             if current == "barn":
@@ -174,8 +180,8 @@ def right_path(inventory):
                     print(Fore.RED + "\n\n.....*creak*....." + Style.RESET_ALL)
                     print("\nWhat was that?")
                     print_slow("\n.....*silence*.....")
-                    print_slow("\n\nYou look around searching for the sound"
-                               "Nothing")
+                    print_slow("\n\nYou look around searching for the sound "
+                               "\n\nNothing")
                     print_slow("\nWhile searching you see something hidden in a pile of hay"
                                "Inside lays a small wooden box, long forgotten")
 
@@ -246,7 +252,6 @@ def right_path(inventory):
                     continue
             else:
                 print("\nInvalid input. Please try again.")
-                continue
 
 def start():
     name = input("What is your name? ")
@@ -264,11 +269,19 @@ def start():
 
     print("\nVERIFICATION COMPLETE.")
     print(Fore.RED + r"""
-                                                                                                                         __  __   ___   ____   ___
-                                                                                                                        |  \/  | / _ \ |  _ \ |_ _|
-                                                                                                                        | |\/| || | | || |_) | | |
-                                                                                                                        | |  | || |_| ||  _ <  | |
-                                                                                                                        |_|  |_| \___/ |_| \_\|___|
+
+                                                                                                                        ██████   ██████    ███████    ███████████   █████
+                                                                                                                        ▒▒██████ ██████   ███▒▒▒▒▒███ ▒▒███▒▒▒▒▒███ ▒▒███ 
+                                                                                                                        ▒███▒█████▒███  ███     ▒▒███ ▒███    ▒███  ▒███ 
+                                                                                                                        ▒███▒▒███ ▒███ ▒███      ▒███ ▒██████████   ▒███ 
+                                                                                                                        ▒███ ▒▒▒  ▒███ ▒███      ▒███ ▒███▒▒▒▒▒███  ▒███ 
+                                                                                                                        ▒███      ▒███ ▒▒███     ███  ▒███    ▒███  ▒███ 
+                                                                                                                        █████     █████ ▒▒▒███████▒   █████   █████ █████
+                                                                                                                        ▒▒▒▒▒     ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒ 
+                                                  
+                                                  
+                                                  
+                                                                                                                    
     """ + Style.RESET_ALL)
 
     print_slow("Welcome to Mori, " f"{name}" + "\n")
@@ -302,9 +315,7 @@ def start():
 
         if start1 == "left":
             inventory_left = set()
-            inventory_left = left_path(inventory_left)
-            if "working flashlight" in inventory_left:
-                left_path2(name, inventory_left)
+            inventory_left = left_path(name, inventory_left)
             break
 
         elif start1 == "right":

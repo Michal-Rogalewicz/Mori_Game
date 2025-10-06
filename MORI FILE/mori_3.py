@@ -131,21 +131,95 @@ def left_path2(name, inventory):
             print_slow("\nA bag"
                        "\nYou check inside the bag"
                        "\nTo find a small pocket knife and some damp matches. ")
+
             if "pocket knife" not in inventory:
                 inventory.add("pocket knife")
                 print_slow("You now have a pocket knife. ")
+
         elif choice == "search":
             print_slow("\nYou search around with your hands touching anything that resembles a item. "
-                       "You find some material, "
-                       "it looks like some cloth and there is something written on it but you can't tell what in this darkness. ")
+                       "You find some material, ")
 
             if "strange cloth" not in inventory:
                 inventory.add("strange cloth")
-                print_slow("\nYou keep the strange cloth, though it's meaning is unclear. ")
+                if "stenching flashlight" in inventory:
+                    print_slow("\nYou find a strange cloth with numbers written on it. ")
+                    print(Fore.BLUE + "1003" + Style.RESET_ALL)
+                    inventory.add("Code 1003")
+                    inventory.discard("strange cloth")
+                else:
+                    print_slow("\nYou keep the strange cloth, though it's meaning is unclear. ")
+                    inventory.add("strange cloth")
+
         else:
             print("Invalid input. Please try again.")
 
-    return inventory #continue on more with your code
+def left_path3(name, inventory)
+    print_slow("\nWhile treading through you spot a tall figure. "
+               "You walk towards to the tall figure that resembles a building of some sort." )
+    print_slow("\nAn abandoned watchtower"
+               "You step closer, hearing the groan of old planks creaking from the wind" )
+
+    while True:
+        watchtower = ask("Do you enter the watchtower or look around first (enter/look_around): ", inventory)
+        if watchtower == "look_around":
+            print_slow("\nYou circle around the watchtower. "
+                       "The ground is littered with broken glass, scraps and dirt"
+                       "Nothing worth your intrest")
+            break
+        elif watchtower == "enter":
+            print_slow("\nYou grip the splintered railing of the watchtower and start walking up. ")
+            if "stenching flashlight" in inventory:
+                print_slow("Your flashlight helps you get to the top safely dodging any cracks in the aged wooden stairs. "
+                           "\nThe view steals your breath, all you see is an endless forest and a cold moon above you."
+                           "\nAn old cabin, you enter the cabin. "
+                           "\nThe cabin is filled with dust. You spot a journal with your flashlight on the desk, you flip it open with one page being readable. "
+                           "\nFollow the trail where the crows circle, the gate is guarded by a .... "
+                           "\nA word is missing,looks like someone didn't have time to finish there journal")
+
+            else:
+                print_slow("\nWith the darkness surrounding you every step is a mystery. "
+                           "\nYou walk slowly up. "
+                           "\nThe steps seem to creak more and more "
+                           "\nYou wonder what was the last time someone was up here. ")
+                print_slow(Fore.RED + "CRACK" + Style.RESET_ALL)
+                print_slow("Your foot breaks through one of the steps"
+                           "You grab the railings firmly ")
+                creak = ask("Gasping for air do you continue to go up or do you go back down (up/down): ", inventory)
+                if creak == "up":
+                    print_slow("\nBrave"
+                               "\nYou make it to the top safely, luck favours you. " 
+                               "\nThe view steals your breath, all you see is an endless forest and a cold moon above you. "
+                               "\nAn old cabin, you enter the cabin. ")
+
+                    light = ask("\nThe cabin has a light switch do you turn on the light? (yes/no): ", inventory)
+                    if light == "yes":
+                        if "strange cloth" in inventory:
+                            print_slow("\nYou take out the strange cloth, you picked up earlier, you can now read what was on it. ")
+                            print_slow(Fore.BLUE + "1003" + Style.RESET_ALL)
+                            print_slow("A code to something")
+                            inventory.add("Code 1003")
+                        else:
+                            print_slow("\nThe dim bulb somehow turns on. You spot a journal on the desk, you flip it open with one page being readable. "
+                                       "\nFollow the trail where the crows circle, the gate is guarded by a .... "
+                                       "\nA word is missing like someone didn't have time to finish there journal")
+
+                    elif light == "no":
+                        print_slow("\nYou can't make out anything in this darkness. ")          #add where it asks you the question once again
+                        break
+                    else:
+                        print("Invalid input. Please try again.")
+
+
+                elif creak == "down":
+                    print_slow("\nYou go down the stairs, frightened." )        #continue the story even more
+                    break
+                else:
+                    print("Invalid input. Please try again.")
+        else:
+            print("Invalid input. Please try again.")
+
+ #continue on more with your code
 
 def right_path(inventory):
     print_slow("\nThe loud silence of the Mori Forest makes you continue to be anxious,"

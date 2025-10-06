@@ -87,6 +87,7 @@ def left_path(name, inventory):
             break
 
     inventory = left_path2(name, inventory)
+    inventory = left_path3(name, inventory)
     return inventory
 
 def left_path2(name, inventory):
@@ -154,18 +155,18 @@ def left_path2(name, inventory):
         else:
             print("Invalid input. Please try again.")
 
-def left_path3(name, inventory)
+def left_path3(name, inventory):
     print_slow("\nWhile treading through you spot a tall figure. "
-               "You walk towards to the tall figure that resembles a building of some sort." )
+               "You walk towards to the tall figure that resembles a building of some sort. ")
     print_slow("\nAn abandoned watchtower"
-               "You step closer, hearing the groan of old planks creaking from the wind" )
+               "\nYou step closer, hearing the groan of old planks creaking from the wind" )
 
     while True:
-        watchtower = ask("Do you enter the watchtower or look around first (enter/look_around): ", inventory)
+        watchtower = ask("Do you enter the watchtower or look around first? (enter/look_around): ", inventory)
         if watchtower == "look_around":
             print_slow("\nYou circle around the watchtower. "
-                       "The ground is littered with broken glass, scraps and dirt"
-                       "Nothing worth your intrest")
+                       "The ground is littered with broken glass, scraps and dirt. "
+                       "Nothing worth your intrest. ")
             break
         elif watchtower == "enter":
             print_slow("\nYou grip the splintered railing of the watchtower and start walking up. ")
@@ -192,24 +193,30 @@ def left_path3(name, inventory)
                                "\nThe view steals your breath, all you see is an endless forest and a cold moon above you. "
                                "\nAn old cabin, you enter the cabin. ")
 
-                    light = ask("\nThe cabin has a light switch do you turn on the light? (yes/no): ", inventory)
-                    if light == "yes":
-                        if "strange cloth" in inventory:
-                            print_slow("\nYou take out the strange cloth, you picked up earlier, you can now read what was on it. ")
-                            print_slow(Fore.BLUE + "1003" + Style.RESET_ALL)
-                            print_slow("A code to something")
-                            inventory.add("Code 1003")
+                    light_attempts = 0
+
+                    while True:
+                        light = ask("\nThe cabin has a light switch do you turn on the light? (yes/no): ", inventory)
+                        if light == "yes":
+                            if "strange cloth" in inventory:
+                                print_slow("\nYou take out the strange cloth, you picked up earlier, you can now read what was on it. ")
+                                print_slow(Fore.BLUE + "1003" + Style.RESET_ALL)
+                                print_slow("A code to something")
+                                inventory.add("Code 1003")
+                            else:
+                                print_slow("\nThe dim bulb somehow turns on. You spot a journal on the desk, you flip it open with one page being readable. "
+                                           "\nFollow the trail where the crows circle, the gate is guarded by a .... "
+                                           "\nA word is missing like someone didn't have time to finish there journal")
+                            break
+
+                        elif light == "no":
+                            light_attempts += 1
+                            if light_attempts == 1:
+                                print_slow("\nYou can't make out anything in this darkness. ")          #add where it asks you the question once again
+                                continue
                         else:
-                            print_slow("\nThe dim bulb somehow turns on. You spot a journal on the desk, you flip it open with one page being readable. "
-                                       "\nFollow the trail where the crows circle, the gate is guarded by a .... "
-                                       "\nA word is missing like someone didn't have time to finish there journal")
-
-                    elif light == "no":
-                        print_slow("\nYou can't make out anything in this darkness. ")          #add where it asks you the question once again
-                        break
-                    else:
-                        print("Invalid input. Please try again.")
-
+                            print("Invalid input. Please try again.")
+                            break
 
                 elif creak == "down":
                     print_slow("\nYou go down the stairs, frightened." )        #continue the story even more
@@ -218,6 +225,8 @@ def left_path3(name, inventory)
                     print("Invalid input. Please try again.")
         else:
             print("Invalid input. Please try again.")
+
+    return inventory
 
  #continue on more with your code
 

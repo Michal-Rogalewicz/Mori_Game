@@ -1,35 +1,72 @@
 import sys
 import time
 import random
+import shutil
 from colorama import Fore, Style
 
-def show_run_warning():
+def glitch_text(message = "THING", flickers = 25):
+    glitch_chars = ["#", "%", "!", "?", "$"]
 
-    sys.stdout.write("\033[0;31m")
-    sys.stdout.flush()
+    for _ in range(flickers):
+        clear_screen()
+        glitched = ""
 
-    run = Fore.RED + Style.BRIGHT + r"""
-    
-██████  ██    ██ ███    ██ 
-██   ██ ██    ██ ████   ██ 
-██████  ██    ██ ██ ██  ██ 
-██   ██ ██    ██ ██  ██ ██ 
-██   ██  ██████  ██   ████ 
+        for text in message:
+            if text != " " and random.random() < 0.35:
+                glitched += random.choice(glitch_chars)
+            else:
+                glitched += text
 
-""" + Style.RESET_ALL
+        print(Fore.RED + Style.BRIGHT + glitched + Style.RESET_ALL)
+        time.sleep(random.uniform(0.05, .15))
 
-    print(run)
-    time.sleep(1)
+    clear_screen()
+    print(Fore.RED + Style.BRIGHT + message + Style.RESET_ALL)
+    time.sleep(1.5)
+    clear_screen()
 
+
+def clear_screen():
     sys.stdout.write("\033[2J\033[H")
     sys.stdout.flush()
+
+def print_centered_block(block: str, color=Fore.RED, bright=True):
+    cols, rows = shutil.get_terminal_size((80, 24))
+    lines = block.strip("\n").splitlines()
+    width = max(len(line) for line in lines)
+    left_pad = max((cols - width) // 2, 0)
+    top_pad = max((rows - len(lines)) // 2, 0)
+
+    sys.stdout.write("\n" * top_pad)
+    style = (Style.BRIGHT if bright else "") + color
+    for line in lines:
+        sys.stdout.write(" " * left_pad + style + line + Style.RESET_ALL + "\n")
+    sys.stdout.flush()
+
+def show_run_warning(duration=2.0):
+    run = Fore.RED + Style.BRIGHT + r"""
+
+    ██████  ██    ██ ███    ██ 
+    ██   ██ ██    ██ ████   ██ 
+    ██████  ██    ██ ██ ██  ██ 
+    ██   ██ ██    ██ ██  ██ ██ 
+    ██   ██  ██████  ██   ████ 
+
+    """ + Style.RESET_ALL
+
+    clear_screen()
+    print_centered_block(run)
+    time.sleep(duration)
+    clear_screen()
 
 def maybe_whisper(name, inventory, chance=0.20):
     if random.random() >= chance:
         return
     whisper = ["\nYou feel something is watching you. ",
                "\nYou hear twigs snap.... nothing. ",
-               "\nDistant sounds making you rethink what your hearing is real. "]
+               "\nDistant sounds making you rethink what your hearing is real. "
+               "\nYou hear footsteps, perfectly in sync with yours..."
+               "\nThe forest wind humming, almost like the Forest is alive"]
     if name:                                                                                          #remember to add this throughout the story
         whisper.append(f"\nThe wind brushes your ear" )
     msg = random.choice(whisper)
@@ -61,6 +98,25 @@ def ask(prompt, inventory = None):
         if choice:
             return choice
 
+def mori_loading_screen():
+    mori = r"""
+    ██████   ██████    ███████    ███████████   █████
+    ▒▒██████ ██████   ███▒▒▒▒▒███ ▒▒███▒▒▒▒▒███ ▒▒███ 
+    ▒███▒█████▒███  ███     ▒▒███ ▒███    ▒███  ▒███ 
+    ▒███▒▒███ ▒███ ▒███      ▒███ ▒██████████   ▒███ 
+    ▒███ ▒▒▒  ▒███ ▒███      ▒███ ▒███▒▒▒▒▒███  ▒███ 
+    ▒███      ▒███ ▒▒███     ███  ▒███    ▒███  ▒███ 
+    █████     █████ ▒▒▒███████▒   █████   █████ █████
+    ▒▒▒▒▒     ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒ 
+"""
+
+    for i in range (10, 101, 10):
+        clear_screen()
+        block = mori + f'\n"{i}%"'
+        print_centered_block(block, color =Fore.RED, bright=True)
+        time.sleep(0.25)
+    clear_screen()
+
 def start():
     name = input("What is your name? ")
     while True:
@@ -71,42 +127,14 @@ def start():
         else:
             print(Fore.RED + "Invalid input. Enter a number." + Style.RESET_ALL)
 
+    mori_loading_screen()                       #you checked this last night you wll remember if it needs a fix
+
     if age < 16:
         print_slow(name + ", you aren't old enough to play this game.")
         return
 
-    print("\nVERIFICATION COMPLETE.")
-    print(Fore.RED + r"""
-
-                                                                                                                        ██████   ██████    ███████    ███████████   █████
-                                                                                                                        ▒▒██████ ██████   ███▒▒▒▒▒███ ▒▒███▒▒▒▒▒███ ▒▒███ 
-                                                                                                                        ▒███▒█████▒███  ███     ▒▒███ ▒███    ▒███  ▒███ 
-                                                                                                                        ▒███▒▒███ ▒███ ▒███      ▒███ ▒██████████   ▒███ 
-                                                                                                                        ▒███ ▒▒▒  ▒███ ▒███      ▒███ ▒███▒▒▒▒▒███  ▒███ 
-                                                                                                                        ▒███      ▒███ ▒▒███     ███  ▒███    ▒███  ▒███ 
-                                                                                                                        █████     █████ ▒▒▒███████▒   █████   █████ █████
-                                                                                                                        ▒▒▒▒▒     ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒ 
-
-
-
-
-    """ + Style.RESET_ALL)
-
     print_slow("Welcome to Mori, " f"{name}" + "\n")
     print("Lets Begin\n")
-
-    print_slow(Fore.RED + """
-"10%"
-"20%"
-"30%"
-"40%"
-"50%"
-"60%"
-"70%"
-"80%"
-"90%"
-"100%"
-""" + Style.RESET_ALL)
 
     print_slow(
         "\nYou check the time and realise it's late, you start to go back to your car, "
@@ -214,15 +242,67 @@ def left_path2(name, inventory):
             tense = ask("\nDo you shine your light at the sound or switch it off and hide? (shine/hide): ", inventory)
             if tense == "shine":
                 print_slow("\nYou shine your flashlight in the darkness. Two pale eyes flash back-")
-                time.sleep(1)
-                show_run_warning()
+                time.sleep(0.75)
+                show_run_warning(duration=2.0)
                 print_slow("\nIt's chasing you "
                            "\nYou bolt through the tress, your heart is pounding... "
                            "\nYou hear it's feet thumping behind, chasing you "
+                           "\nIt feel's like you've been running for hours "
                            "\nYou can't outrun it "
-                           "\nGasping for air you stop next to a bridge"
-                           "\nThe "
-                creature = ask("\nGasping for air you stop next to a bridge ? (yes/no): ", inventory)
+                           "\nGasping for air you stop next to a waterfall and boardwalk "
+                           "\nThe waterfall drop looks deadly "
+                           "\nThe boardwalk is stale and rocky "
+                           "\nThe rustling from the Mori Forest is getting closer "
+                           "\nYou have to make a choice, " + name)
+                creature = ask("\nDo you try to cross the boardwalk or do you jump down the waterfall hoping you survive ? (cross/jump): ", inventory)
+                if creature == "cross":
+                    print_slow("\nYou start trotting gently hoping you can make it to the other side of the boardwalk. "
+                               "\nSlowly..."
+                               "\nStep by step..."
+                               "\nThe boardwalk seems stable enough to hold you" )                  #continue this
+
+                elif creature == "jump":
+                            print_slow("\nYou take a deep breath and leap into the roaring waterfall. ")
+                            time.sleep(1)
+                            print_slow("\nCold water engulfs you, it's freezing, pulling you down violently. ")
+                            print_slow(Fore.RED + "*THUMP*" + Style.RESET_ALL)
+                            time.sleep(2)
+                            print_slow("\nYou wake up, washed ashore you have a lump on the back of your head. "
+                                       "\nYour flashlight is gone, you must of lost it in the water. ")
+                            maybe_whisper(name, inventory, chance=0.50)
+                            print_slow("\nYou check your surroundings "
+                                       "\nHappy that thing left you alone. "
+                                       "\nYou approach a cave with lamps lit up with fire that dazzles your eyes. "
+                                       "\nSomeone must of been here not long ago. " 
+                                       "\nYou take cautious steps inside, the echo of dripping water echoing throughout the cave." )
+                            print_slow("You steep even deeper into the cave."
+                                       "The lamps continue on and on "
+                                       "The walls have symbols written on them, spirals, eyes, "
+                                       "and a crude depiction of a creature with too many limbs. "
+                                       "The tunnels opens into a vast underground chamber. "
+                                       "Dozens of burnt out candles circle a stone altar. "
+                                       "Something is covered with cloth, and the smell... it's unbearable." )
+                            investigate = ask("\nDo you uncover what's on the altar? (yes/no): ", inventory)
+
+                            if investigate == "yes":
+                                print_slow("\nYour shaking hands pull back the cloth... "
+                                           "A mirror, cracked and blackened, stares back - your reflection twisted smiling. "
+                                           "A voice whispers" )
+                                glitch_text("YOU WON'T EVER LEAVE", flickers=10)
+                                print_slow("\nYou kick the mirror disturbed at what you just saw. "
+                                           "\nThe reflection is gone, it's been replaced by your horrified face")
+                                inventory.add("Mirror Fragment")
+
+                            elif investigate == "no":
+                                print_slow("\nYou back away from the altar, refusing to see what lies beneath the cloth. ")
+
+                            else:
+                                print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
+
+                            print_slow("\nYou retreat toward the cave entrance." )
+
+                else:
+                    print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
 
         elif claw == "ignore":
             print_slow("\nYou choose not to tempt your own fate, walking away from the claw marked trail "
@@ -244,7 +324,7 @@ def left_path2(name, inventory):
         choice = ask("\nDo you keep moving forward or try searching around you for something that can be useful to you? (forward/search): ", inventory)
         if choice == "forward":
             print_slow("\nYou grit your teeth and press on, but each step sinks deeper into the mud. "
-                   "Your heartbeat drowns out the silence of the Mori Forest. ")
+                       "Your heartbeat drowns out the silence of the Mori Forest. ")
             print_slow("\nYou keep on walking forward hoping you will spot some light. ")
             print_slow(Fore.RED +"\nYou trip"+ Style.RESET_ALL)
             print_slow(Fore.RED + "\n......." + Style.RESET_ALL)

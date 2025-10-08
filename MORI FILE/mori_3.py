@@ -3,13 +3,34 @@ import time
 import random
 from colorama import Fore, Style
 
+def show_run_warning():
+
+    sys.stdout.write("\033[0;31m")
+    sys.stdout.flush()
+
+    run = Fore.RED + Style.BRIGHT + r"""
+    
+██████  ██    ██ ███    ██ 
+██   ██ ██    ██ ████   ██ 
+██████  ██    ██ ██ ██  ██ 
+██   ██ ██    ██ ██  ██ ██ 
+██   ██  ██████  ██   ████ 
+
+""" + Style.RESET_ALL
+
+    print(run)
+    time.sleep(1)
+
+    sys.stdout.write("\033[2J\033[H")
+    sys.stdout.flush()
+
 def maybe_whisper(name, inventory, chance=0.20):
     if random.random() >= chance:
         return
     whisper = ["\nYou feel something is watching you. ",
                "\nYou hear twigs snap.... nothing. ",
-               "\nDistant sounds making you rethink what your hearing is real"]
-    if name:                                                                                          #remeber to add this throughout the story
+               "\nDistant sounds making you rethink what your hearing is real. "]
+    if name:                                                                                          #remember to add this throughout the story
         whisper.append(f"\nThe wind brushes your ear" )
     msg = random.choice(whisper)
     print_slow(Fore.BLUE + msg + Style.RESET_ALL)
@@ -40,6 +61,76 @@ def ask(prompt, inventory = None):
         if choice:
             return choice
 
+def start():
+    name = input("What is your name? ")
+    while True:
+        age = input("\nWhat is your age? ")
+        if age.isdigit():
+            age = int(age)
+            break
+        else:
+            print(Fore.RED + "Invalid input. Enter a number." + Style.RESET_ALL)
+
+    if age < 16:
+        print_slow(name + ", you aren't old enough to play this game.")
+        return
+
+    print("\nVERIFICATION COMPLETE.")
+    print(Fore.RED + r"""
+
+                                                                                                                        ██████   ██████    ███████    ███████████   █████
+                                                                                                                        ▒▒██████ ██████   ███▒▒▒▒▒███ ▒▒███▒▒▒▒▒███ ▒▒███ 
+                                                                                                                        ▒███▒█████▒███  ███     ▒▒███ ▒███    ▒███  ▒███ 
+                                                                                                                        ▒███▒▒███ ▒███ ▒███      ▒███ ▒██████████   ▒███ 
+                                                                                                                        ▒███ ▒▒▒  ▒███ ▒███      ▒███ ▒███▒▒▒▒▒███  ▒███ 
+                                                                                                                        ▒███      ▒███ ▒▒███     ███  ▒███    ▒███  ▒███ 
+                                                                                                                        █████     █████ ▒▒▒███████▒   █████   █████ █████
+                                                                                                                        ▒▒▒▒▒     ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒ 
+
+
+
+
+    """ + Style.RESET_ALL)
+
+    print_slow("Welcome to Mori, " f"{name}" + "\n")
+    print("Lets Begin\n")
+
+    print_slow(Fore.RED + """
+"10%"
+"20%"
+"30%"
+"40%"
+"50%"
+"60%"
+"70%"
+"80%"
+"90%"
+"100%"
+""" + Style.RESET_ALL)
+
+    print_slow(
+        "\nYou check the time and realise it's late, you start to go back to your car, "
+        "taking the path back, the darkness got darker and you start to panic which led you to take a turn into a path you've never been to. "
+        "You are now lost in the darkness of the Mori Forest.")
+
+    print_slow(f"\n{name}, your choices now will effect if you make it back to your car.")
+
+    while True:
+        start1 = ask("\nDo you take the left or right path? (left/right): ")
+        if start1 == "left":
+            inventory_left = set()
+            inventory_left = left_path(name, inventory_left)
+            break
+
+        elif start1 == "right":
+            inventory_right = set()
+            inventory_right = right_path(set())  # just for now have this later on change it
+            break
+
+        else:
+            print(Fore.RED + "\nInvalid input. Please type 'left' or 'right'." + Style.RESET_ALL)
+
+
 def left_path(name, inventory):
     print_slow("\nThe path continues going deeper into the Mori forest." 
                "\nThe path seems endless leading you only to a more shallow and dark place."
@@ -51,7 +142,7 @@ def left_path(name, inventory):
         path = ask("\nDo you stop? (yes/no): ", inventory)
 
         if path == "yes":
-            batteries = ask("\nDo you check the long grass? (yes/no): ", inventory)
+            batteries = ask("\nAre you sure you want to check the long grass? (yes/no): ", inventory)
             if batteries ==  "yes":
                 if "batteries" not in inventory:
                     print_slow("\nSearching.....with your hand......you find....................some used batteries.")
@@ -123,8 +214,15 @@ def left_path2(name, inventory):
             tense = ask("\nDo you shine your light at the sound or switch it off and hide? (shine/hide): ", inventory)
             if tense == "shine":
                 print_slow("\nYou shine your flashlight in the darkness. Two pale eyes flash back-")
-
-                                                                                                                            #add some fun chase scene
+                time.sleep(1)
+                show_run_warning()
+                print_slow("\nIt's chasing you "
+                           "\nYou bolt through the tress, your heart is pounding... "
+                           "\nYou hear it's feet thumping behind, chasing you "
+                           "\nYou can't outrun it "
+                           "\nGasping for air you stop next to a bridge"
+                           "\nThe "
+                creature = ask("\nGasping for air you stop next to a bridge ? (yes/no): ", inventory)
 
         elif claw == "ignore":
             print_slow("\nYou choose not to tempt your own fate, walking away from the claw marked trail "
@@ -388,75 +486,6 @@ def right_path(inventory):
                 continue
         else:
             print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
-
-def start():
-    name = input("What is your name? ")
-    while True:
-        age = input("\nWhat is your age? ")
-        if age.isdigit():
-            age = int(age)
-            break
-        else:
-            print(Fore.RED + "Invalid input. Enter a number." + Style.RESET_ALL)
-
-    if age < 16:
-        print_slow(name + ", you aren't old enough to play this game.")
-        return
-
-    print("\nVERIFICATION COMPLETE.")
-    print(Fore.RED + r"""
-
-                                                                                                                        ██████   ██████    ███████    ███████████   █████
-                                                                                                                        ▒▒██████ ██████   ███▒▒▒▒▒███ ▒▒███▒▒▒▒▒███ ▒▒███ 
-                                                                                                                        ▒███▒█████▒███  ███     ▒▒███ ▒███    ▒███  ▒███ 
-                                                                                                                        ▒███▒▒███ ▒███ ▒███      ▒███ ▒██████████   ▒███ 
-                                                                                                                        ▒███ ▒▒▒  ▒███ ▒███      ▒███ ▒███▒▒▒▒▒███  ▒███ 
-                                                                                                                        ▒███      ▒███ ▒▒███     ███  ▒███    ▒███  ▒███ 
-                                                                                                                        █████     █████ ▒▒▒███████▒   █████   █████ █████
-                                                                                                                        ▒▒▒▒▒     ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒ 
-                                                  
-                                                  
-                                                  
-                                                                                                                    
-    """ + Style.RESET_ALL)
-
-    print_slow("Welcome to Mori, " f"{name}" + "\n")
-    print("Lets Begin\n")
-
-    print_slow(Fore.RED + """
-"10%"
-"20%"
-"30%"
-"40%"
-"50%"
-"60%"
-"70%"
-"80%"
-"90%"
-"100%"
-""" + Style.RESET_ALL)
-
-    print_slow(
-        "\nYou check the time and realise it's late, you start to go back to your car, "
-        "taking the path back, the darkness got darker and you start to panic which led you to take a turn into a path you've never been to. "
-        "You are now lost in the darkness of the Mori Forest.")
-
-    print_slow(f"\n{name}, your choices now will effect if you make it back to your car.")
-
-    while True:
-        start1 = ask("\nDo you take the left or right path? (left/right): ")
-        if start1 == "left":
-            inventory_left = set()
-            inventory_left = left_path(name, inventory_left)
-            break
-
-        elif start1 == "right":
-            inventory_right = set()
-            inventory_right = right_path(set())                    #just for now have this later on change it
-            break
-
-        else:
-            print(Fore.RED + "\nInvalid input. Please type 'left' or 'right'." + Style.RESET_ALL)
 
 if __name__ == "__main__":
     start()

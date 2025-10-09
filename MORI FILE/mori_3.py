@@ -292,9 +292,9 @@ def left_path2(name, inventory):
                     time.sleep(1)
                     show_run_warning(duration=3)
 
-                    print_slow(Fore.RED + "\nIt's approaching you " + Style.RESET_ALL)
+                    print_slow(Fore.RED + "\nIt's approaching you, " + Style.RESET_ALL)
                     time.sleep(1)
-                    print_slow(name + "make a choice ")
+                    print_slow(name + " make a choice ")
                     escaping = ask("\nDo you jump or run? (jump/run): ", inventory)
                     if escaping == "jump":
                         print_slow("\nYou jump from the boardwalk.  "

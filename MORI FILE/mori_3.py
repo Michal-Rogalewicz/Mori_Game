@@ -76,7 +76,7 @@ def print_slow(string):
     for letter in string:
         sys.stdout.write(letter)
         sys.stdout.flush()
-        time.sleep(0.0001)         #change always when testing to 0.0001
+        time.sleep(0.1)         #change always when testing to 0.0001
 
 def show_inventory(inventory):
     if inventory:
@@ -127,11 +127,11 @@ def start():
         else:
             print(Fore.RED + "Invalid input. Enter a number." + Style.RESET_ALL)
 
-    mori_loading_screen()                       #you checked this last night you wll remember if it needs a fix
-
     if age < 16:
         print_slow(name + ", you aren't old enough to play this game.")
         return
+
+    mori_loading_screen()
 
     print_slow("Welcome to Mori, " f"{name}" + "\n")
     print("Lets Begin\n")

@@ -6,7 +6,7 @@ Player_Name = None
 Player = ""
 
 Locations = ["Mori Forest", "watchtower", "cave", "boardwalk", "waterfall", "Mill Tunnel",
-             "farmhouse", "river", "shallow bridge", "cabin", "office", "altar", "barn", "forest"]
+             "farmhouse", "river", "shallow bridge", "cabin", "office", "altar", "barn"]
 
 def print_slow(text):
 

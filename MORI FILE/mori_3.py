@@ -89,7 +89,7 @@ def show_run_warning(duration=2.0):
 ░██    ░██   ░██   ░██  ░██   ░████ 
 ░██     ░██   ░██████   ░██    ░███ 
     """ + Style.RESET_ALL
-        clear_screen(); print_centered_block(run); time.sleep(duration); clear_screen()
+    clear_screen(); print_centered_block(run); time.sleep(duration); clear_screen()
 
 def mori_loading_screen():
     mori = r"""
@@ -561,8 +561,7 @@ def cave_scene(name, inventory):
     return inventory
 
 def cave_scene2(name, inventory):
-    print_slow("\nThe loud silence of the Mori Forest makes you continue to be anxious,"
-               "by each second going deeper into the Mori Forest. You hear a river nearby,"
+    print_slow("\nThere is a river next to the waterfall,"
                "the soothing sound of water calms you.")
     print_slow("\nYou go towards the soothing sound of the river.")
     maybe_whisper(inventory, chance=0.2)

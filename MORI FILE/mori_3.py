@@ -140,11 +140,11 @@ def start():
     print_slow(f"\n{name}, your choices now will effect if you make it back to your car.")
 
     inventory = set()
-    inventory = left_path(name, inventory)
+    inventory = path1(name, inventory)
     return
 
 
-def left_path(name, inventory):
+def path1(name, inventory):
     print_slow("\nThe path continues going deeper into the Mori forest." 
                "\nThe path seems endless leading you only to a more shallow and dark place."
                "\nWhile walking you spot something shining in the tall grass of the Mori Forest.")
@@ -202,16 +202,16 @@ def left_path(name, inventory):
             print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
             continue
 
-    inventory = left_path2(name, inventory)
+    inventory = path2(name, inventory)
 
     if "Route" in inventory:
         inventory.discard("Route")
         return inventory
 
-    inventory = left_path3(name, inventory)
+    inventory = path3(name, inventory)
     return inventory
 
-def left_path2(name, inventory):
+def path2(name, inventory):
     print_slow(f"\n{name} you go deeper into the Mori Forest. "
                "The air grows colder, you can tell its very late. "
                "Just hoping you can make it out")
@@ -280,6 +280,7 @@ def left_path2(name, inventory):
                                     inventory.add("broken left hand")
 
                                     inventory = cave_scene(name, inventory)
+                                    inventory = cave_scene2(name, inventory)
                                     inventory.add("Route")
                                     return inventory
 
@@ -293,7 +294,7 @@ def left_path2(name, inventory):
                                                "\nDid it fall with the boardwalk? ")
                                     inventory.discard("stenching flashlight")
 
-                                    inventory = left_path3(name, inventory)
+                                    inventory = path3(name, inventory)
                                     inventory.add("Route")
                                     return inventory
 
@@ -310,7 +311,9 @@ def left_path2(name, inventory):
                                            "\nIt sting's when you touch it. "
                                            "\nYour flashlight is gone, you must of lost it in the water. ")
                                 inventory.discard("stenching flashlight")
+
                                 inventory = cave_scene(name, inventory)
+                                inventory = cave_scene2(name, inventory)
                                 inventory.add("Route")
                                 return inventory
 
@@ -318,8 +321,8 @@ def left_path2(name, inventory):
                                 print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
 
                     elif tense == "hide":
-                                print_slow("\nYou click the flashlight off and crouch low next to the trees"
-                                           "\nYou press your back against a tree, holding your breath ")
+                        print_slow("\nYou click the flashlight off and crouch low next to the trees"
+                                   "\nYou press your back against a tree, holding your breath ")
                     time.sleep(1)
                     maybe_whisper(name, inventory, chance=1)
 
@@ -349,7 +352,14 @@ def left_path2(name, inventory):
                             print_slow("\nIt surges the other way, shoving through the branches. Maybe it sensed something else... or lost intrest. ")
 
                     elif stealth == "dont_move":
-                        print("Yo")
+                        print_slow("\nYou stay perfectly still, your body trembling but frozen in place. "
+                                   "\nYou can hear your heartbeat, pounding."
+                                   "\nYou feel its presence inches behind you.")
+                        time.sleep(2)
+                        print_slow("\nYou dare not to move a muscle."
+                                   "\nEvery instinct screaming to move, but you stay frozen. ")
+                        maybe_whisper(name, inventory, chance=1)
+                        print_slow("\nWhatever it was, it's gone... for now. ")
 
                     else:
                         print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
@@ -360,7 +370,7 @@ def left_path2(name, inventory):
                     print_slow("\nWhile treading through deeper into the Mori Forest you spot a tall figure. ")
                     print_slow(Fore.BLUE + "\nA watchtower" + Style.RESET_ALL)
 
-                    inventory = left_path3(name, inventory)
+                    inventory = path3(name, inventory)
                     inventory.add("Route")
                     return inventory
 
@@ -395,10 +405,10 @@ def left_path2(name, inventory):
             print_slow(Fore.RED +"\nYou trip"+ Style.RESET_ALL)
             print_slow(Fore.RED + "\n......." + Style.RESET_ALL)
             print_slow("\nYou look behind you" 
-                   "\nTrying to view what made you trip" 
-                   "\nA bag"
-                   "\nYou check inside the bag"
-                   "\nTo find a small pocket knife and some damp matches. ")
+                       "\nTrying to view what made you trip" 
+                       "\nA bag"
+                       "\nYou check inside the bag"
+                       "\nTo find a small pocket knife and some damp matches. ")
 
             if "pocket knife" not in inventory:
                 inventory.add("pocket knife")
@@ -425,7 +435,7 @@ def left_path2(name, inventory):
 
     return inventory
 
-def left_path3(name, inventory):
+def path3(name, inventory):
     print_slow("\nWhile treading through deeper into the Mori Forest you spot a tall figure. "
                "You walk towards to the tall figure that resembles a building of some sort. ")
     print_slow("\nAn abandoned watchtower. "
@@ -515,7 +525,18 @@ def left_path3(name, inventory):
 
     return inventory
 
-def left_path4(inventory, name):
+
+
+
+
+
+
+
+def path4(inventory, name):                                                                     #Mirror Fragment, Code 1003, Clue, Pocket Knife
+    if "broken left hand" in inventory:
+        print_slow("\nThe pain in your hand has gotten alot worse, your hand is now infected. ")
+        print_slow("\n" + Fore.RED + name + Style.RESET_ALL + " you don't have long left. ")
+
     if "Clue" in inventory:
         print_slow(Fore.BLUE + "\n" + name + Style.RESET_ALL + "There are two paths before you." )
 
@@ -525,11 +546,23 @@ def left_path4(inventory, name):
         print_slow("\nOne path is surrounded by crows, their dark eyes and feathers camouflage them in the darkness of the Mori Forest. "
                    "The crows make you uneasy, without thinking you take the other path. ")
 
-def left_path5(inventory, name):
-    print("(Example")
+
+
+
+
+
+
+
+
+
+
 
 def cave_scene(name, inventory):
     maybe_whisper(name, inventory, chance=0.5)
+
+    if "broken left hand" in inventory:
+        print_slow("\nYour " + Fore.RED + "broken left hand" + Style.RESET_ALL +
+                   " throbs painfully with each step.")
 
     print_slow("\nYou check your surroundings "
                "\nHappy that thing left you alone. "
@@ -561,96 +594,198 @@ def cave_scene(name, inventory):
     return inventory
 
 def cave_scene2(name, inventory):
-    print_slow("\nThere is a river next to the waterfall,"
-               "the soothing sound of water calms you.")
-    print_slow("\nYou go towards the soothing sound of the river.")
-    maybe_whisper(inventory, chance=0.2)
+    print_slow("\nYou drag yourself along the current of the river, soaked and shivering.")
+    print_slow("\nYou follow the current, hoping it might lead you out of the Mori Forest.")
 
-    lantern_lit = False
+    if "broken left hand" in inventory:
+        print_slow("\nThe pain in your " + Fore.RED + "broken left hand" + Style.RESET_ALL +
+                   " feels worse and worse, making you weaker by each second.")
+
+    print_slow("\nYou get to the end, finding a rusty farmhouse."
+               "\nYou enter the barn, the mud swarms your feet making each step of your's heavy."
+               "\nThe mud sticks your attention")
+    print_slow("\nWhile searching you see something hidden in a pile of hay"
+               "\nInside lays a small wooden box, long forgotten")
+    open_box = ask("\nDo you open the small wooden box? (yes/no): ", inventory)
+    if open_box == "yes":
+        if "lighter" not in inventory:
+            print_slow("Inside you find a lighter, it looks well kept, "
+                       " it must of been special to someone. ")
+            inventory.add("lighter")
+            print_slow("\nYou now have a lighter. ")
+        else:
+            print_slow("\nOnly dust remains in the box. ")
+    elif open_box == "no":
+            print_slow("You leave the box shut. ")
+    else:
+        print_slow(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
+
+    print_slow("\nYou leave the barn and enter the farmhouse,"
+               "\nSomething is swaying around in the farmhouse."
+               "\nYou check it out just to see a dented lantern swaying gently from a coat rack.")
+    if "Lighted Lantern" not in inventory and "lantern" not in inventory:
+        inventory.add("lantern")
+        print_slow("\nYou now have a lantern. ")
+
+    if "lighter" in inventory and "lantern" in inventory and "Lighted Lantern" not in inventory:
+        print_slow("\nYou light the lantern with your lighter. ")
+        inventory.discard("lighter")
+        inventory.discard("lantern")
+        inventory.add("Lighted Lantern")
+        print_slow("\nYou now have a lighted lantern that glows through the darkness.")
+
+    if "Lighted Lantern" in inventory:
+        print_slow("\nWith the lamp you delve deeper into the farmhouse, through the eerie hall, "
+                   " which leads you to discover an old office.")
+        print_slow("\nEntering the office with the luminous lantern reveals a desk. "
+                   "Inside the desk you find a odd map. ")
+        if "map" not in inventory:
+            inventory.add("map")
+            print_slow("\nYou now have a map. ")
+            print_slow("\nThe map shows a path near the farmhouse that will lead you to the... ")
+            print_slow(Fore.RED + "Mill Tunnel" + Style.RESET_ALL)
+
+        print_slow("\nWith the map and your lantern lit, you go back outside. "
+                   "\nYou follow the map heading towards the Mill Tunnel.")
+        return mill_tunnel(name, inventory)
+
+    print_slow("\nYou step back outside with a lantern, it has no use to you, you throw it away. "
+               "\nYou step back into the Mori Forest"
+               "\nWith nothing to guide your journey, you can only wander around till you find something. "
+               "\nAfter a while, you finally stumble across two paths.")
+
+    inventory.discard("lantern")
+    path4(inventory, name)
+    return inventory
+
+def mill_tunnel(name, inventory):
+    print_slow("\nFollowing the map's trail. ")
+    sign = ask("\nYou see a fallen sign. Do you read it? (yes/no): ", inventory)
+    if sign == "yes":
+        print_slow("\nThe sign is old and rusty barely being to read the sign you can recognise only some letters."
+                   "\n\nThe sign says ")
+        print_slow(Fore.RED + "B..W..RE  OF  T..E   M..LL   T..NN..L" + Style.RESET_ALL)
+        print_slow("\nDisturbed you continue walking.")
+    elif sign == "no":
+        print_slow("\nYou ignore the sign and continue walking. ")
+    else:
+        print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
+
+    print_slow("\nYou have arrived " + name + " at the Mill Tunnel. ")
+    print_slow("\nYou step inside. Water drips from the ceiling."
+               "\nThe passage narrows."
+               "\nA corroded warning plate on the wall."
+               "\nYou read it. ")
+    print_slow(Fore.RED + "DO N.T DESCEND D.WN. FL..R WE.GHT IS UN.TA..." + Style.RESET_ALL)        #UNSTABLE
+    print_slow("\nYou move deeper until the floor changes from new to old rotted planks. "
+               "\nSome planks look soaked and soft. ")
+
     while True:
-        sign = ask("\nYou see a fallen sign next to the river. Do you read it? (yes/no): ", inventory)
-        if sign == "yes":
-            print_slow("\nThe sign is old and rusty barely being to read the sign you can recognise only some letters."
-                       "\n\nThe sign says ")
-            print_slow(Fore.RED + "B..W..RE  OF  T..E   M..RI   F..R..S..T" + Style.RESET_ALL)
-            print_slow("\nDisturbed you continue walking following the current of the river.")
+        trap1 = ask("\nThere are three paths which do you take? (left,middle,right): ", inventory)
+
+        if trap1 == "left":
+            print_slow("\nYou start walking gently, you make it halfway through... ")
+            print("The planks start snapping behind you. ")
+            show_run_warning(3)
+            print_slow("\nYou spot a small opening ahead and run for it."
+                       "\nYou jump to the small opening and start to crawl out, at the end you fall out."
+                       "\nYou get up and start following a path next to the opening."
+                       "\nIt leads you to two paths. ")
+            path4(inventory, name)
+            return inventory
+
+        elif trap1 == "middle":
+            print_slow("\nYou test each board, slow and steady. "
+                       "\nThe boards squeak more and more by each step. "
+                       "\nThe boards hold and you cross the gap")
             break
-        elif sign == "no":
-            print_slow("\nYou ignore the sign and continue walking following the current of the river.")
+
+        elif trap1 == "right":
+            print_slow("\nThe right edge seems to be weak. You balance yourself and stay on the left side and make it across. ")
             break
+
         else:
             print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
-
-    while True:
-        print_slow("\nYou get to the end, finding a rusty farmhouse.")
-        current = ask("\nDo you enter the farmhouse by the barn or the main door? (barn/main_door): ")
-        if current == "barn":
-            print_slow("You enter the barn, the mud swarms your feet making each step of your's heavy."
-                       "\nThe mud sticks your attention")
-            print(Fore.RED + "\n\n.....*creak*....." + Style.RESET_ALL)
-            print("\nWhat was that?")
-            print_slow("\n.....*silence*.....")
-            print_slow("\n\nYou look around searching for the sound "
-                       "\n\nNothing")
-            print_slow("\nWhile searching you see something hidden in a pile of hay"
-                       "Inside lays a small wooden box, long forgotten")
-            open_box = ask("\nDo you open the small wooden box? (yes/no): ")
-            if open_box == "yes":
-                if "lighter" not in inventory:
-                    print_slow("Inside you find a lighter, it looks well kept, "
-                               "it must of been special to someone. ")
-                    inventory.add("lighter")
-                    print_slow("\nYou now have a lighter")
-                else:
-                    print_slow("\nOnly dust remains in the box nothing else. ")
-            elif open_box == "no":
-                print_slow("You leave the box shut")
-            else:
-                print_slow(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
             continue
-        elif current == "main_door":
-            print_slow("\nYou enter the pitch black farmhouse, you stand still..."
-                       "\nThe farmhouse is filled with a loud silence.")
-            main = ask("\nSomething is in here with you. Do you run or face the mystery? (run/face): ")
-            if main == "run":
-                print_slow("\nYou try to run but the mud makes your steps heavy making you trip, "
-                           "making you hit the mud face first.")
-                continue
-            elif main == "face":
-                if "lantern" not in inventory:
-                    print_slow("\nYou face the the mystery,"
-                               "just to see a dented lantern swaying gently from a coat rack.")
-                    inventory.add("lantern")
-                    print_slow("\nYou now have a lantern.")
-                if not lantern_lit and "lantern" in inventory:
-                    if "lighter" in inventory:
-                        lighter_answer = ask("Light the lantern with the lighter? (yes/no): ", inventory)
-                        if lighter_answer == "yes":
-                            lantern_lit = True
-                            print_slow("\nThe lamp's light pushes back the dark")
-                    else:
-                        print_slow("\nYou need something to ignite the lamp")
-                print_slow("\nWith the lamp you delve deeper into the house, through the eerie hall, "
-                           "which leads you to discover an old office.")
-                if lantern_lit:
-                    if "map" not in inventory:
-                        print_slow("\nEntering the office with the luminous lantern reveals a desk. "
-                                   "Inside the desk you find a odd map. "
-                                   "\nThe map shows a path near the farmhouse that will lead you to the... ")
-                        print_slow(Fore.RED + "Mill Tunnel" + Style.RESET_ALL)
-                        inventory.add("map")
-                        print_slow("\nYou now have a map")
-                    else:
-                        print_slow("\nNothing else to take, you already took the map.")
-                else:
-                    print_slow("\nWithout any light you can't seem to pick anything out. ")
-                if lantern_lit and "map" in inventory:
-                    print_slow("\nWith the map and your lit lantern, you go back outside. "
-                               "You follow the map heading towards the Mill Tunnel.")
-                    return inventory
-                continue
+
+    print_slow("\nYou continue deeper into the tunnel... "
+               "\nThe glow from your lantern makes the wire's ahead gleam faintly."
+               "\nYou could try to jump over or crawl under.")
+
+    while True:
+        trap2 = ask("What do you do? (jump/crawl): ", inventory)
+        if trap2 == "crawl":
+                print_slow("\nYou crawl under the wire, your back scrapes it. The wire doesnt set anything off. "
+                           "\nThe path ahead is clear. ")
+                break
+        elif trap2 == "jump":
+            if "broken left hand" in inventory:
+                print_slow("\nYou sway your whole body for a jump forward"
+                           "\nThe pain in your hand wobbles you mid jump, making you land off balance."
+                           "\nYour boots set off the wire. ")
+                show_run_warning(3)
+                print_slow("\nYou pounce forward.")
+                print_slow(Fore.RED + "*shake*" + Style.RESET_ALL)
+                print_slow("\nRock's start to fall "
+                           "\nThe tunnel is starting to collapse"
+                           "\nYou spot a small opening ahead and run for it."
+                           "\nYou jump to the small opening and start to crawl out, at the end you fall out."
+                           "\nYou get up and start following a path next to the opening."
+                           "\nIt leads you to two paths.")
+                path4(inventory, name)
+                return inventory
+
+            else:
+                print_slow("\nYou sway your whole body for a jump forward. "
+                           "\nYou land on the other side with balance, and clear the wire without touching it. "
+                           "\nThe path ahead is clear. ")
+                break
         else:
             print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
+            continue
 
-if __name__ == "__main__":
-    start()
+    print_slow("\nA bright glow ahead struck your attention. "
+               "\nThe room is blocked by a stone gate. "
+               "\nThere are three stone runes set into the wall: "
+               + Fore.GREEN + "SILENCE" + Style.RESET_ALL + ", "
+               + Fore.BLUE + "DARKNESS" + Style.RESET_ALL + ", and"
+               + Fore.YELLOW + "TIME" + Style.RESET_ALL + ".")
+    print_slow("\nThe floor below you starts shifting. ")
+
+    pattern = [["SILENCE", "TIME", "DARKNESS"],
+                ["DARKNESS", "SILENCE", "TIME"],
+                ["TIME", "DARKNESS", "SILENCE"]]
+
+    print_slow(Fore.RED + f"\nThe runes glow: {pattern[0]}... {pattern[1]}...{pattern[2]}..." + Style.RESET_ALL)
+    time.sleep(2)
+    print_slow("Was that a code?")
+    print_slow("Enter the three runes in order (example: TIME,TIME,TIME). ")
+    correct_pattern = [row[0] for row in pattern]
+    memory = ask("Enter the pattern: ", inventory)
+    attempt = [tok.strip().upper for tok in memory.split(",") if tok.strip()]
+    if len(attempt) == 1:
+        attempt = [tok.strip().upper for tok in memory.split() if tok.strip()]
+
+    if attempt == correct_pattern:
+        print_slow("\nThe runes all pulse at once."
+                   "\nDust falls as the stone door slides open."
+                   "\nYou enter the room and find an old supply room."
+                   "\nThis must of been where they used to store their appliances."
+                   "\nEverything looks old and rusty, how long has these been sitting here?"
+                   "\nWhy was this all left behind and abandoned?"                
+                   "\nYou scavenge trying to find anything useful to you. "
+                   "\n")                                                                            #continue on
+
+        return inventory
+
+    else:
+        show_run_warning(3)
+        print_slow("\nThe runes all pulse at once in the colour red."
+                   "\nThe ground rumbles, cracks forming at your feet. "
+                   "\nThe tunnel is starting to collapse."
+                   "\nYou spot a small opening ahead and run for it."
+                   "\nYou jump to the small opening and start to crawl out, at the end you fall out."
+                   "\nYou get up and start following a path next to the opening."
+                   "\nIt leads you to two paths. ")
+        path4(inventory, name)
+        return inventory

@@ -203,12 +203,8 @@ def path1(name, inventory):
             continue
 
     inventory = path2(name, inventory)
-
-    if "Route" in inventory:
-        inventory.discard("Route")
-        return inventory
-
     inventory = path3(name, inventory)
+    inventory = path4(inventory, name)
     return inventory
 
 def path2(name, inventory):
@@ -294,8 +290,6 @@ def path2(name, inventory):
                                                "\nDid it fall with the boardwalk? ")
                                     inventory.discard("stenching flashlight")
 
-                                    inventory = path3(name, inventory)
-                                    inventory.add("Route")
                                     return inventory
 
                                 else:
@@ -312,9 +306,6 @@ def path2(name, inventory):
                                            "\nYour flashlight is gone, you must of lost it in the water. ")
                                 inventory.discard("stenching flashlight")
 
-                                inventory = cave_scene(name, inventory)
-                                inventory = cave_scene2(name, inventory)
-                                inventory.add("Route")
                                 return inventory
 
                             else:
@@ -370,8 +361,6 @@ def path2(name, inventory):
                     print_slow("\nWhile treading through deeper into the Mori Forest you spot a tall figure. ")
                     print_slow(Fore.BLUE + "\nA watchtower" + Style.RESET_ALL)
 
-                    inventory = path3(name, inventory)
-                    inventory.add("Route")
                     return inventory
 
             elif claw == "ignore":
@@ -864,9 +853,8 @@ def mill_tunnel(name, inventory):
     print_slow("Enter the three runes in order (example: TIME,TIME,TIME). ")
     correct_pattern = [row[0] for row in pattern]
     memory = ask("Enter the pattern: ", inventory)
-    attempt = [tok.strip().upper for tok in memory.split(",") if tok.strip()]
-    if len(attempt) == 1:
-        attempt = [tok.strip().upper for tok in memory.split() if tok.strip()]
+    tokens = re.split(r'[\s,]+', memory.strip())
+    attempt = [token.upper() for token in tokens if token]
 
     if attempt == correct_pattern:
         print_slow("\nThe runes all pulse at once."

@@ -134,10 +134,10 @@ def start():
     print_slow("Welcome to Mori, " f"{name}" + "\n")
     print("Lets Begin\n")
 
-    print_slow("\nYou check the time and realise it's late, you start to go back to your car, "
+    print_slow("\nYou check the time and realise it's late, you start to go back to the beginning of the Mori Forest, "
                "taking the path back, the darkness got darker and you start to panic which led you to take a turn into a path you've never been to. "       
                "You are now lost in the darkness of the Mori Forest.")
-    print_slow(f"\n{name}, your choices now will effect if you make it back to your car.")
+    print_slow(f"\n{name}, your choices now will effect if you make it out alive.")
 
     inventory = set()
     inventory = path1(name, inventory)
@@ -525,36 +525,138 @@ def path3(name, inventory):
 
     return inventory
 
-
-
-
-
-
-
-
-def path4(inventory, name):                                                                     #Mirror Fragment, Code 1003, Clue, Pocket Knife
-    if "broken left hand" in inventory:
-        print_slow("\nThe pain in your hand has gotten alot worse, your hand is now infected. ")
-        print_slow("\n" + Fore.RED + name + Style.RESET_ALL + " you don't have long left. ")
+def path4(inventory, name):
+    print_slow(Fore.BLUE + f"\n{name}" + Style.RESET_ALL + " There are two paths before you. One is circled with crows, the other is dark and quiet.")
+    maybe_whisper(name, inventory, chance=0.3)
 
     if "Clue" in inventory:
-        print_slow(Fore.BLUE + "\n" + name + Style.RESET_ALL + "There are two paths before you." )
+        print_slow("\nYou remember the journal line: 'Follow the trail where the crows circle...'")
+    else:
+        print_slow("\nYou have no clear hint. You trust your gut.")
+
+    choice = ask("\nWhich path do you take? (crows/not_crows):", inventory)
+    print_slow("\nAs you step forward, the world tightens. The trees close in and something huge moves in the dark.")
+    time.sleep(1)
+    show_run_warning(2)
+
+    if choice == "crows":
+        print_slow("\nYou push through the birds; they burst skyward like a black storm.")
+        time.sleep(1)
+        print_slow("\nThe crows' scattering draws attention — something answers the sound. A shape surges out, huge and fast.")
+        if "Flare Gun" in inventory and "flare" in inventory:
+            if "broken left hand" in inventory:
+                print_slow("\nYour injured hand trembles. Aiming is hard.")
+                if random.random() < 0.45:
+                    print_slow("\nYou fire the flare. It streaks wide but still erupts into a violent bloom of light.")
+                else:
+                    print_slow("\nYour shot sails uselessly. The flare lights the trees but misses the creature's face.")
+                inventory.discard("flare")
+            else:
+                print_slow("\nYou aim true and fire. The flare blossoms overhead, bathing the clearing in angry light.")
+                inventory.discard("flare")
+                print_slow("\nThe creature howls and stumbles back, blinded and frantic.")
+        else:
+            print_slow("\nYou have nothing to light the sky. You'll have to rely on speed and cunning.")
+
+        if "Mirror Fragment" in inventory:
+            print_slow("\nYou hold the Mirror Fragment up. Light catches its broken face and reveals a mossy keypad by the gate.")
+        else:
+            print_slow("\nThere is a glint where a mirror could have reflected light — you can't use it without a reflective surface.")
+
+        if "Code 1003" in inventory:
+            print_slow("\nYou dash to the keypad and punch in the numbers you memorised: 1003.")
+            time.sleep(0.6)
+            print_slow(Fore.GREEN + "\nThe tumblers inside the gate clack; it starts to open." + Style.RESET_ALL)
+            print_slow("\nThe pathway clears just as the creature lunges. You wrench yourself through the gap.")
+            print_slow("\nYou stagger onto a moonlit road. Headlights approach; someone has seen the flare. You're saved.")
+            print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "Saved by signal and quick thinking.")
+            return inventory
+        else:
+            print_slow("\nThe gate is stuck shut and there's no code. You need to force it.")
+            if "pocket knife" in inventory:
+                print_slow("\nYou jam your pocket knife into a rusty hinge and lever like hell.")
+                if random.random() < (0.7 if "broken left hand" not in inventory else 0.4):
+                    print_slow("\nThe hinge gives. The gate creaks open and you tumble through as the creature slams into the metal.")
+                    print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "A desperate escape — you live.")
+                    return inventory
+                else:
+                    print_slow("\nYour injured hand fails you — the knife slips. The creature grabs at you.")
+                    show_run_warning(2)
+                    glitch_text("YOU CAN'T RUN", flickers=8)
+                    print_slow(Fore.RED + "\nENDING: " + Style.RESET_ALL + "Caught.")
+                    return inventory
+            else:
+                if "Flare Gun" in inventory:
+                    print_slow("\nYou swing the Flare Gun like a club and manage to stagger it long enough to slip away.")
+                    print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "Bruised and bleeding, you survive by sheer luck.")
+                    return inventory
+                print_slow("\nYou have no tool. The creature tears into your world.")
+                show_run_warning(2)
+                glitch_text("DARKNESS", flickers=6)
+                print(Fore.RED + "\nENDING: " + Style.RESET_ALL + "Taken in the shadows.")
+                return inventory
 
     else:
-        print_slow(Fore.BLUE + "\n" + name + Style.RESET_ALL + "There are two paths before you." )
-        maybe_whisper(name, inventory, chance=0.2)
-        print_slow("\nOne path is surrounded by crows, their dark eyes and feathers camouflage them in the darkness of the Mori Forest. "
-                   "The crows make you uneasy, without thinking you take the other path. ")
+        print_slow("\nYou take the quieter path. The air grows cold and the trees press close.")
+        time.sleep(0.6)
+        print_slow("\nSomething moves behind you — a low, grinding breath. The chase begins.")
+        stumble_penalty = 0.4 if "broken left hand" in inventory else 0.15
 
+        print_slow("\nYou reach an old rope barrier tied across a narrow path. If you cut it you can slip through, otherwise you'll have to climb.")
+        cut_choice = ask("\nDo you cut the rope or try to climb over it?, (cut/climb): ", inventory)
+        if cut_choice == "cut" and "pocket knife" in inventory:
+            print_slow("\nYou draw your pocket knife and saw through the rope. It snaps free and you slip through the gap.")
+        else:
+            if random.random() < (0.3 + stumble_penalty):
+                print_slow("\nYou slip while climbing, scraping your palms and losing time.")
+                show_run_warning(2)
+            else:
+                print_slow("\nYou clamber up and over without incident.")
 
+        print_slow("\nThe tunnel forks. To the left, a rusted door with a small lock. To the right, a shaft with a polished plate that could reflect light.")
+        fork = ask("\nWhich do you try? (door/shaft): ", inventory)
+        if fork == "door":
+            if "Code 1003" in inventory:
+                print_slow("\nYou punch 1003 into the lock. It trembles and gives with a groan.")
+                if "Flare Gun" in inventory and "flare" in inventory:
+                    print_slow("\nYou fire the flare through a cracked window. The flare bursts into the night.")
+                    inventory.discard("flare")
+                    print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "The signal brings rescue; you collapse into safety.")
+                    return inventory
+                print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "You survive to walk another day, shaken but alive.")
+                return inventory
+            else:
+                if "pocket knife" in inventory:
+                    print_slow("\nYou pry the lock with the knife, shards of rust falling. The door grudgingly opens.")
+                    show_run_warning(2)
+                    print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "A desperate last-minute escape — you live.")
+                    return inventory
+                print_slow("\nYou can't open it. The pursuer closes in.")
+                glitch_text("RUN", flickers=8)
+                print(Fore.RED + "\nENDING: " + Style.RESET_ALL + "Overwhelmed in the dark.")
+                return inventory
+        else:
+            print_slow("\nYou wedge the Mirror Fragment into your palm and angle it at the shaft.")
+            if "Mirror Fragment" in inventory:
+                print_slow("\nThe shard sends a thin beam of reflected moonlight down the shaft, catching a hanging chain.")
+                print_slow("\nYou yank the chain; it rattles and drops a rusted ladder into a hidden alcove. You climb down.")
+                if "Flare Gun" not in inventory:
+                    inventory.add("Flare Gun")
+                    inventory.add("flare")
+                    print_slow("\nIn the shed you find a Flare Gun and one flare. It might save you yet.")
+            else:
+                print_slow("\nYou have nothing reflective. The noise behind you grows louder.")
+                show_run_warning(2)
+                print_slow(Fore.RED + "\nENDING: " + Style.RESET_ALL + "Captured in the shaft of the forest.")
+                return inventory
 
-
-
-
-
-
-
-
+            if "flare" in inventory:
+                print_slow("\nYou have one last flare. You kneel and fire it skyward.")
+                inventory.discard("flare")
+                print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "Rescued by chance and the flare you found. You live to tell the tale.")
+                return inventory
+            print_slow(Fore.BLUE + "\nENDING: " + Style.RESET_ALL + "Alive, but changed forever.")
+            return inventory
 
 
 def cave_scene(name, inventory):
@@ -772,10 +874,24 @@ def mill_tunnel(name, inventory):
                    "\nYou enter the room and find an old supply room."
                    "\nThis must of been where they used to store their appliances."
                    "\nEverything looks old and rusty, how long has these been sitting here?"
-                   "\nWhy was this all left behind and abandoned?"                
-                   "\nYou scavenge trying to find anything useful to you. "
-                   "\n")                                                                            #continue on
+                   "\nWhy was this all left behind and abandoned?"
+                   "\nYou scavenge trying to find anything useful to you. ")
+        print_slow("\nYou rummage through rusted lockers and crates. "
+                   "\nYou find a padded case with a faded emblem.")
+        time.sleep(1)
 
+        if "Flare Gun" not in inventory:
+            inventory.add("Flare Gun")
+            inventory.add("flare")
+            print_slow("\nYou take a Flare Gun and a single flare. "
+                       "\nThe gun looks old but usable. ")
+        else:
+            print_slow("\nThe supply room has already been scavenged. Nothing more to take here.")
+
+        print_slow("\nYou secure your new item and head through a passage that looks to be leading you out of the Mill Tunnel."
+                   "\nYou make it out safely."
+                   "\nYou start to head down a path near the exit which leads you to two paths. ")
+        path4(inventory, name)
         return inventory
 
     else:
@@ -789,3 +905,6 @@ def mill_tunnel(name, inventory):
                    "\nIt leads you to two paths. ")
         path4(inventory, name)
         return inventory
+
+if __name__ == "__main__":
+    start()

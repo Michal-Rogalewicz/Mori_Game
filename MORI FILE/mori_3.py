@@ -347,7 +347,9 @@ def path2(name, inventory):
                         time.sleep(1)
                         print_slow("\nWhile treading through deeper into the Mori Forest you spot a tall figure. ")
                         print_slow(Fore.BLUE + "\nA watchtower" + Style.RESET_ALL)
-
+                    
+                    else:  
+                        print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
                         return inventory
 
             elif claw == "ignore":
@@ -358,7 +360,7 @@ def path2(name, inventory):
                 return inventory
 
             else:
-                print(Fore.RED +"Invalid input. Please try again." + Style.RESET_ALL)
+                print(Fore.RED + "Invalid input. Please try again." + Style.RESET_ALL)
                 continue
 
     if "flashlight" in inventory:
@@ -406,7 +408,7 @@ def path2(name, inventory):
             break
 
         else:
-            print(Fore.RED + "Invalid input. Please try again." + Style.RESET_ALL)
+            print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
             continue
 
     return inventory
@@ -510,10 +512,13 @@ def path4(name, inventory):
     else:
         print_slow("\nYou have no clear hint. You trust your gut.")
 
-    choice = ask("\nWhich path do you take? (crows/not_crows):", inventory)
-    print_slow("\nAs you step forward, the world tightens. The trees close in and something huge approaches you in the dark.")
-    time.sleep(1)
-    show_run_warning(2)
+    valid_choices = ["crows", "dark_path"]
+    while True:
+        choice = ask("\nWhich path do you take? (crows/dark_path): ", inventory)
+        if choice in valid_choices:
+            break
+        print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
+
 
     if choice == "crows":
         print_slow("\nYou run through the birds they burst up in the sky like a black cloud.")

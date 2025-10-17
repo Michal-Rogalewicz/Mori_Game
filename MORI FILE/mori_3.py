@@ -30,7 +30,7 @@ def print_centered_block(block: str, color=Fore.RED, bright=True):
 # - center: center each printed line
 # - margin: used to avoid wrapping too close to terminal edges
 # - delay: pause between printing each character to create a "slow text" effect
-def print_slow(text, *, center=True, margin=20, delay=0.0001):  # change to 0.02 for actual game speed
+def print_slow(text, *, center=True, margin=20, delay=0.02):  # change to 0.02 for actual game speed
     # highlight any known location names in green (case-insensitive)
     for loc in Locations:
         pattern = rf"\b{re.escape(loc)}\b"
@@ -131,7 +131,7 @@ def ask(prompt, inventory=None):
 
 # Display a large ASCII "run" warning briefly — used when the player needs to run
 def show_run_warning(duration=2.0):
-    run = Fore.RED + Style.BRIGHT + r"""
+    run = r"""
 ░█████████  ░██     ░██ ░███    ░██ 
 ░██     ░██ ░██     ░██ ░████   ░██ 
 ░██     ░██ ░██     ░██ ░██░██  ░██ 
@@ -139,8 +139,11 @@ def show_run_warning(duration=2.0):
 ░██   ░██   ░██     ░██ ░██  ░██░██ 
 ░██    ░██   ░██   ░██  ░██   ░████ 
 ░██     ░██   ░██████   ░██    ░███ 
-    """ + Style.RESET_ALL
-    clear_screen();print_centered_block(run);time.sleep(duration);clear_screen()
+    """ 
+    clear_screen()
+    print_centered_block(run, color=Fore.RED, bright=True)
+    time.sleep(duration)
+    clear_screen()
 
 
 # Small loading/progress animation that shows the MORI logo and percent
@@ -384,13 +387,18 @@ def path2(name, inventory):
                                     # running may let you escape but you lose flashlight
                                     print_slow("\nYou dash forward, the planks crack beneath your feet. "
                                                "\nIt starts chasing you")
-                                print_slow("\nYou leap off the final plank as the whole boardwalk breaks down "
-                                           "\nYour flashlight falls from your pocket"
-                                           "\nYou tumble into the grass. "
-                                           "\nYou look back.... the boardwalk is gone and so was it. "
-                                           "\nDid it fall with the boardwalk? ")
-                                inventory.discard("stenching flashlight")
-                                return inventory
+                                    print_slow("\nYou leap off the final plank as the whole boardwalk breaks down "
+                                               "\nYour flashlight falls from your pocket"
+                                               "\nYou tumble into the grass. "
+                                               "\nYou look back.... the boardwalk is gone and so was it. "
+                                               "\nDid it fall with the boardwalk? ")
+                                    inventory.discard("stenching flashlight")
+                                    return inventory
+
+                                else:
+                                    print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
+                                    continue
+
                             elif creature == "jump":
                                 # jumping into waterfall leads to injury and loss of flashlight
                                 print_slow("\nYou take a deep breath and leap into the roaring waterfall. ")
@@ -493,9 +501,7 @@ def path2(name, inventory):
 
     # offer a simple choice to search or go forward; both give possible items
     while True:
-        choice = ask(
-            "\nDo you keep moving forward or try searching around you for something that can be useful to you? (forward/search): ",
-            inventory)
+        choice = ask("\nDo you keep moving forward or try searching around you for something that can be useful to you? (forward/search): ",inventory)
         if choice == "forward":
             print_slow("\nYou grit your teeth and press on, but each step sinks deeper into the mud. "
                        "\nYour heartbeat drowns out the silence of the Mori Forest. ")
@@ -512,6 +518,7 @@ def path2(name, inventory):
                 inventory.add("pocket knife")
                 print_slow("You now have a pocket knife. ")
                 break
+
         elif choice == "search":
             print_slow("\nYou search around with your hands touching anything that resembles a item. "
                        "\nYou find some material it feels like it's a piece of cloth. ")
@@ -531,6 +538,8 @@ def path2(name, inventory):
         else:
             print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
             continue
+
+    return inventory
 
 
 def path3(name, inventory):
@@ -1168,7 +1177,7 @@ def mill_tunnel(name, inventory):
 
         if trap1 == "left":
             print_slow("\nYou start walking gently, you make it halfway through... ")
-            print("The planks start snapping behind you. ")
+            print_slow("\nThe planks start snapping behind you. ")
             show_run_warning(3)
             print_slow("\nYou spot a small opening ahead and run for it."
                        "\nYou jump to the small opening and start to crawl out, at the end you fall out."
@@ -1291,7 +1300,6 @@ def mill_tunnel(name, inventory):
                    "\nIt leads you to two paths. ")
         inventory = path4(name, inventory)
         return inventory
-
 
 if __name__ == "__main__":
     # run the game when this file is executed directly

@@ -2,11 +2,13 @@
 # Explain imports and initialization
 import sys, time, random, shutil, re, textwrap  # system, timing, randomness, terminal size, regex, text wrapping
 from colorama import Fore, Style, init  # colored console output helpers
+
 init()  # initialize colorama for Windows consoles
 
 # Locations used for highlighting in printed text (used by print_slow to color these names)
 Locations = ["Mori Forest", "watchtower", "cave", "boardwalk", "waterfall", "Mill Tunnel",
              "farmhouse", "river", "shallow bridge", "cabin", "office", "altar", "barn"]
+
 
 # Center a block of text in the terminal and print with color/brightness
 # - Calculates padding to roughly center the block in the terminal window.
@@ -23,11 +25,12 @@ def print_centered_block(block: str, color=Fore.RED, bright=True):
         sys.stdout.write(" " * left_pad + style + line + Style.RESET_ALL + "\n")
     sys.stdout.flush()
 
+
 # Print text slowly, highlighting known location names and optionally centering lines.
 # - center: center each printed line
 # - margin: used to avoid wrapping too close to terminal edges
 # - delay: pause between printing each character to create a "slow text" effect
-def print_slow(text, *, center=True, margin=20, delay=0.0008):
+def print_slow(text, *, center=True, margin=20, delay=0.0001):  # change to 0.02 for actual game speed
     # highlight any known location names in green (case-insensitive)
     for loc in Locations:
         pattern = rf"\b{re.escape(loc)}\b"
@@ -60,6 +63,7 @@ def print_slow(text, *, center=True, margin=20, delay=0.0008):
             sys.stdout.write("\n")
             sys.stdout.flush()
 
+
 # Possibly print a short eerie whisper message based on chance (adds atmosphere)
 # - name: used to optionally add a personal touch
 # - chance: probability (0..1) the whisper appears
@@ -72,14 +76,15 @@ def maybe_whisper(name, chance=0.1):
                "\nYou hear footsteps, perfectly in sync with yours...",
                "\nThe forest wind humming, almost like the Forest is alive. "]
     if name:
-        whisper.append(f"\nThe wind brushes your ear" )
+        whisper.append(f"\nThe wind brushes your ear")
     # choose one whisper and print it slowly in blue
     print_slow(Fore.BLUE + random.choice(whisper) + Style.RESET_ALL)
+
 
 # Show a flickering "glitch" animation of a message (used for dramatic events)
 # - message: text to reveal after flicker
 # - flickers: how many flicker frames to show
-def glitch_text(message = "THING", flickers = 25):
+def glitch_text(message="THING", flickers=25):
     glitch_chars = ["#", "%", "!", "?", "$"]
     for _ in range(flickers):
         clear_screen()
@@ -95,22 +100,25 @@ def glitch_text(message = "THING", flickers = 25):
     time.sleep(1.5)
     clear_screen()
 
+
 # Clear the terminal screen using ANSI escape sequences
 def clear_screen():
     sys.stdout.write("\033[2J\033[H")
     sys.stdout.flush()
 
+
 # Show the player's inventory (sorted). If empty, show (empty).
-def show_inventory(inventory = None):
+def show_inventory(inventory=None):
     items = sorted(list(inventory or []))
     if items:
         print_slow("\nInventory: " + ", ".join(items) + "\n")
     else:
         print_slow("\nInventory: (empty)\n")
 
+
 # Reusable input helper that supports typing 'i' or 'inventory' at any prompt to view items
 # - returns the user's non-empty input in lowercase
-def ask(prompt, inventory = None):
+def ask(prompt, inventory=None):
     while True:
         choice = input(prompt).strip().lower()
         # allow quick inventory check
@@ -119,6 +127,7 @@ def ask(prompt, inventory = None):
             continue
         if choice:
             return choice
+
 
 # Display a large ASCII "run" warning briefly — used when the player needs to run
 def show_run_warning(duration=2.0):
@@ -131,7 +140,8 @@ def show_run_warning(duration=2.0):
 ░██    ░██   ░██   ░██  ░██   ░████ 
 ░██     ░██   ░██████   ░██    ░███ 
     """ + Style.RESET_ALL
-    clear_screen(); print_centered_block(run); time.sleep(duration); clear_screen()
+    clear_screen();print_centered_block(run);time.sleep(duration);clear_screen()
+
 
 # Small loading/progress animation that shows the MORI logo and percent
 def mori_loading_screen():
@@ -146,12 +156,13 @@ def mori_loading_screen():
     """
 
     # simple percentage loop for the loading feel
-    for i in range (10, 101, 10):
+    for i in range(10, 101, 10):
         clear_screen()
         block = mori + f"\n{i}%"
-        print_centered_block(block, color =Fore.RED, bright=True)
+        print_centered_block(block, color=Fore.RED, bright=True)
         time.sleep(0.25)
     clear_screen()
+
 
 # Unified ending display: shows frame, title, subtitle and optional color
 def show_ending(title: str, subtitle: str, color=Fore.BLUE):
@@ -163,9 +174,10 @@ def show_ending(title: str, subtitle: str, color=Fore.BLUE):
     print_slow(color + "\n" + frame + Style.RESET_ALL)
     print_slow(color + f"\nENDING: {title}" + Style.RESET_ALL)
     time.sleep(1)
-    print_slow("\n" + subtitle )
+    print_slow("\n" + subtitle)
     print_slow(color + "\n" + frame + Style.RESET_ALL)
     time.sleep(3)
+
 
 # When a game-ending condition happens, show the ending and add the ending key to inventory.
 # Returns the updated inventory so the caller can keep track of endings reached.
@@ -173,6 +185,7 @@ def conclude_game(inventory: set, key: str, title: str, subtitle: str, color=For
     show_ending(title, subtitle, color=color)
     inventory.add(key)
     return inventory
+
 
 # Entry point for the game: asks name and age, does basic validation and starts the story
 def start():
@@ -201,9 +214,9 @@ def start():
 
     # short opening scene
     print_slow("\nYou check the time and realise it's late, you start to go back to the beginning of the Mori Forest, "
-               "taking the path back, the darkness got darker and you start to panic which led you to take a turn into a path you've never been to. "       
-               "You are now lost in the darkness of the Mori Forest.")
-    print_slow(f"\n{name}, your choices now will effect if you make it out alive.")
+               "taking the path back, the darkness got darker and you start to panic which led you to take a turn into a path you've never been to. "
+               "You are now lost in the darkness of the Mori Forest."
+               f"\n{name}, your choices now will effect if you make it out alive.")
 
     inventory = set()  # track items and endings
     path1(name, inventory)
@@ -212,7 +225,7 @@ def start():
 
 # PATH 1: initial exploration and finding flashlight / batteries
 def path1(name, inventory):
-    print_slow("\nThe path continues going deeper into the Mori forest." 
+    print_slow("\nThe path continues going deeper into the Mori forest."
                "\nThe path seems endless leading you only to a more shallow and dark place."
                "\nWhile walking you spot something shining in the tall grass of the Mori Forest.")
     maybe_whisper(name, chance=0.3)
@@ -223,7 +236,7 @@ def path1(name, inventory):
 
         if path == "yes":
             batteries = ask("\nAre you sure you want to check the long grass? (yes/no): ", inventory)
-            if batteries ==  "yes":
+            if batteries == "yes":
                 # add batteries to inventory if not already present
                 if "batteries" not in inventory:
                     print_slow("\nSearching.....with your hand......you find....................some used batteries.")
@@ -262,7 +275,8 @@ def path1(name, inventory):
                 inventory.discard("flashlight")
                 inventory.discard("batteries")
                 inventory.add("stenching flashlight")
-                print_slow("\nYou have the batteries, the stenching flashlight now works. This might come in handy later for you. ")
+                print_slow(
+                    "\nYou have the batteries, the stenching flashlight now works. This might come in handy later for you. ")
 
             break
 
@@ -278,6 +292,7 @@ def path1(name, inventory):
     inventory = path3(name, inventory)
     inventory = path4(name, inventory)
     return inventory
+
 
 # PATH 2: deeper forest, possible chase sequences and consequences
 def path2(name, inventory):
@@ -296,12 +311,14 @@ def path2(name, inventory):
         while True:
             claw = ask("\nDo you follow the claw marks or ignore them? (follow/ignore): ", inventory)
             if claw == "follow":
-                print_slow("\nYou follow the claw marks and with each step the marks grow fresher. Suddenly, you hear rustling. "
-                           "\nYour grip tightens on the flashlight. ")
+                print_slow(
+                    "\nYou follow the claw marks and with each step the marks grow fresher. Suddenly, you hear rustling. "
+                    "\nYour grip tightens on the flashlight. ")
                 print_slow(Fore.RED + "\n...*rustle*...*snap*..." + Style.RESET_ALL)
                 # encounter choices: shine or hide
                 while True:
-                    tense = ask("\nDo you shine your light at the sound or switch it off and hide? (shine/hide): ", inventory)
+                    tense = ask("\nDo you shine your light at the sound or switch it off and hide? (shine/hide): ",
+                                inventory)
                     if tense == "shine":
                         # shining leads to immediate chase and choices at boardwalk/waterfall
                         print_slow("\nYou shine your flashlight in the darkness. Two pale eyes flash back-")
@@ -319,19 +336,24 @@ def path2(name, inventory):
                                    "\nYou have to make a choice, " + name)
 
                         while True:
-                            creature = ask("\nDo you try to cross the boardwalk or do you jump down the waterfall hoping you survive? (cross/jump): ", inventory)
+                            creature = ask(
+                                "\nDo you try to cross the boardwalk or do you jump down the waterfall hoping you survive? (cross/jump): ",
+                                inventory)
                             if creature == "cross":
                                 # tense sequence — multiple outcomes depend on choices and luck
-                                print_slow("\nYou start trotting gently hoping you can make it to the other side of the boardwalk. "
-                                           "\nSlowly..."
-                                           "\nStep by step..."
-                                           "\nThen..." )
+                                print_slow(
+                                    "\nYou start trotting gently hoping you can make it to the other side of the boardwalk. "
+                                    "\nSlowly..."
+                                    "\nStep by step..."
+                                    "\nThen...")
                                 print_slow(Fore.RED + "\n*THUD*...*THUD*...*THUD*..." + Style.RESET_ALL)
                                 time.sleep(1)
-                                print_slow("\nIts behind you. It crashes through the tress, it's claws scraping anything in it's way. ")
+                                print_slow(
+                                    "\nIts behind you. It crashes through the tress, it's claws scraping anything in it's way. ")
                                 time.sleep(1)
-                                print_slow("\nYou look back. The two pale eyes glint in the dark, closer now too close. "
-                                           "\nThe boardwalk starts shaking violently ")
+                                print_slow(
+                                    "\nYou look back. The two pale eyes glint in the dark, closer now too close. "
+                                    "\nThe boardwalk starts shaking violently ")
                                 time.sleep(1)
                                 show_run_warning(duration=3)
                                 print_slow(Fore.RED + "\nIt's approaching you, " + Style.RESET_ALL)
@@ -347,7 +369,7 @@ def path2(name, inventory):
                                                "\nYour left hand is fractured. "
                                                "\nThe agony strikes.")
                                     time.sleep(1)
-                                    glitch_text("\nAAAHHHHHHHHH" , flickers=15)
+                                    glitch_text("\nAAAHHHHHHHHH", flickers=15)
                                     print_slow("\nYou clench your wrist hoping the pain stops "
                                                "\nYour flashlight is gone, you must of lost it in the water. ")
                                     inventory.discard("stenching flashlight")
@@ -361,7 +383,7 @@ def path2(name, inventory):
                                 elif escaping == "run":
                                     # running may let you escape but you lose flashlight
                                     print_slow("\nYou dash forward, the planks crack beneath your feet. "
-                                           "\nIt starts chasing you")
+                                               "\nIt starts chasing you")
                                 print_slow("\nYou leap off the final plank as the whole boardwalk breaks down "
                                            "\nYour flashlight falls from your pocket"
                                            "\nYou tumble into the grass. "
@@ -380,7 +402,6 @@ def path2(name, inventory):
                                            "\nIt sting's when you touch it. "
                                            "\nYour flashlight is gone, you must of lost it in the water. ")
                                 inventory.discard("stenching flashlight")
-
                                 return inventory
 
                             else:
@@ -396,9 +417,12 @@ def path2(name, inventory):
                         print_slow("\nSomething heavy is stepping through the bushes.Slow. Searching. ")
                         time.sleep(1)
 
-                        stealth=ask("\nDo you not move a muscle or throw a small pebble to distract it? (throw/dont_move): ", inventory)
+                        stealth = ask(
+                            "\nDo you not move a muscle or throw a small pebble to distract it? (throw/dont_move): ",
+                            inventory)
                         if stealth == "throw":
-                            print_slow("\nYou feel around the dirt, trying to pick up the small pebble. You flick it into the dark-far to your right. ")
+                            print_slow(
+                                "\nYou feel around the dirt, trying to pick up the small pebble. You flick it into the dark-far to your right. ")
                             print_slow(Fore.RED + "\n...*snap*... *scrape*" + Style.RESET_ALL)
                             time.sleep(5)
 
@@ -415,7 +439,8 @@ def path2(name, inventory):
                                 glitch_text("DON'T MOVE", flickers=10)
                                 print_slow("\nYou freeze and start trembling.Then-")
                                 print_slow(Fore.RED + "\n...*THUD*..." + Style.RESET_ALL)
-                                print_slow("\nIt surges the other way, shoving through the branches. Maybe it sensed something else... or lost intrest. ")
+                                print_slow(
+                                    "\nIt surges the other way, shoving through the branches. Maybe it sensed something else... or lost intrest. ")
 
                         elif stealth == "dont_move":
                             print_slow("\nYou stay perfectly still, your body trembling but frozen in place. "
@@ -437,8 +462,8 @@ def path2(name, inventory):
                         print_slow("\nWhile treading through deeper into the Mori Forest you spot a tall figure. ")
                         print_slow("\nA watchtower")
                         return inventory
-                    
-                    else:  
+
+                    else:
                         print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
                         continue
 
@@ -468,15 +493,17 @@ def path2(name, inventory):
 
     # offer a simple choice to search or go forward; both give possible items
     while True:
-        choice = ask("\nDo you keep moving forward or try searching around you for something that can be useful to you? (forward/search): ", inventory)
+        choice = ask(
+            "\nDo you keep moving forward or try searching around you for something that can be useful to you? (forward/search): ",
+            inventory)
         if choice == "forward":
             print_slow("\nYou grit your teeth and press on, but each step sinks deeper into the mud. "
                        "\nYour heartbeat drowns out the silence of the Mori Forest. ")
             print_slow("\nYou keep on walking forward hoping you will spot some light. ")
-            print_slow(Fore.RED +"\nYou trip"+ Style.RESET_ALL)
+            print_slow(Fore.RED + "\nYou trip" + Style.RESET_ALL)
             print_slow(Fore.RED + "\n......." + Style.RESET_ALL)
-            print_slow("\nYou look behind you" 
-                       "\nTrying to view what made you trip" 
+            print_slow("\nYou look behind you"
+                       "\nTrying to view what made you trip"
                        "\nA bag"
                        "\nYou check inside the bag"
                        "\nTo find a small pocket knife and some damp matches. ")
@@ -526,8 +553,9 @@ def path3(name, inventory):
             print_slow("\nYou grip the splintered railing of the watchtower and start walking up. ")
             if "stenching flashlight" in inventory:
                 # with a working flashlight the player finds a clue in a cabin
-                print_slow("\nYour flashlight helps you get to the top safely dodging any cracks in the aged wooden stairs. "
-                           "\nThe view steals your breath, all you see is an endless forest and a cold moon above you.")
+                print_slow(
+                    "\nYour flashlight helps you get to the top safely dodging any cracks in the aged wooden stairs. "
+                    "\nThe view steals your breath, all you see is an endless forest and a cold moon above you.")
 
                 maybe_whisper(name, chance=0.2)
 
@@ -552,7 +580,7 @@ def path3(name, inventory):
                 if creak == "up":
                     # if you continue up in the dark, you can still find the clue if you turn on the light later
                     print_slow("\nBrave"
-                               "\nYou make it to the top safely, luck favours you. " 
+                               "\nYou make it to the top safely, luck favours you. "
                                "\nThe view steals your breath, all you see is an endless forest and a cold moon above you. "
                                "\nAn old cabin, you enter the cabin. ")
 
@@ -561,17 +589,19 @@ def path3(name, inventory):
                         if light == "yes":
                             if "strange cloth" in inventory:
                                 # reveal code if player has cloth
-                                print_slow("\nYou take out the strange cloth, you picked up earlier, you can now read what was on it. ")
+                                print_slow(
+                                    "\nYou take out the strange cloth, you picked up earlier, you can now read what was on it. ")
                                 print_slow(Fore.BLUE + "\n1003" + Style.RESET_ALL)
                                 print_slow("\nA code to something. ")
                                 inventory.add("Code 1003")
                             else:
-                                print_slow("\nThe dim bulb somehow turns on. You spot a journal on the desk, you flip it open with one page being readable. "
-                                           "\nFollow the trail where the crows circle, the gate is guarded by a .... "
-                                           "\nA word is missing like someone didn't have time to finish there journal"
-                                           "\nYou go down the watchtower, and continue till the end of the path. "
-                                           "\nThere it is"
-                                           "\nThe path being surrounded by crows ")
+                                print_slow(
+                                    "\nThe dim bulb somehow turns on. You spot a journal on the desk, you flip it open with one page being readable. "
+                                    "\nFollow the trail where the crows circle, the gate is guarded by a .... "
+                                    "\nA word is missing like someone didn't have time to finish there journal"
+                                    "\nYou go down the watchtower, and continue till the end of the path. "
+                                    "\nThere it is"
+                                    "\nThe path being surrounded by crows ")
                                 inventory.add("Clue")
                             break
                         elif light == "no":
@@ -582,7 +612,7 @@ def path3(name, inventory):
                                 continue
                             elif confirm == "yes":
                                 print_slow("\nYou decide to stay in the dark, firm with your choice. "
-                                           "\nWithout any light you have no option but to go down the watchtower. " 
+                                           "\nWithout any light you have no option but to go down the watchtower. "
                                            "\nYou continue till the end of the path. ")
 
                                 break
@@ -602,9 +632,11 @@ def path3(name, inventory):
 
     return inventory
 
+
 def path4(name, inventory):
     # present two paths, one marked by crows (clue related), one darker
-    print_slow(Fore.BLUE + f"\n{name}" + Style.RESET_ALL + "\n there are two paths before you. One is circled with crows, the other is dark and quiet. ")
+    print_slow(
+        Fore.BLUE + f"\n{name}" + Style.RESET_ALL + "\n there are two paths before you. One is circled with crows, the other is dark and quiet. ")
     maybe_whisper(name, chance=0.3)
 
     if "Clue" in inventory:
@@ -629,8 +661,6 @@ def path4(name, inventory):
         # staggered encounter sequence with many branching outcomes
         print_slow("\nYou step onto the path surrounded by crows. ")
         time.sleep(1)
-        print_slow("\nThe cawing cuts out, the crows take flight, something else answers from the tress . ")
-        print_slow(Fore.RED + "\nIt steps out..." + Style.RESET_ALL + "\nThe pale eyes glint in the dark. ")
         maybe_whisper(name, chance=1)
 
         if "Clue" in inventory:
@@ -638,7 +668,7 @@ def path4(name, inventory):
             print_slow("\nSomething feels different, it feels like you know it, memory's flash when you look around. ")
             while True:
                 clue = ask("\nDo you explore the area that gives you some sort of familiarity? (yes/no): ", inventory)
-                if clue in("yes", "no"):
+                if clue in ("yes", "no"):
                     break
                 print(Fore.RED + "\nInvalid input. Please type 'yes' or 'no'." + Style.RESET_ALL)
 
@@ -648,8 +678,9 @@ def path4(name, inventory):
                            "\nAt the end a rusted maintenance hatch. A keypad blinks beside it. ")
                 if "Code 1003" in inventory:
                     # success ends the game with a special tape ending
-                    print_slow("\nYou punch in the code you found earlier. The hatch creaks open, revealing a dark tunnel. "
-                               "\nYou follow the tunnel, until it leads you to a control room, monitors, and a tape machine that clicks on. ")
+                    print_slow(
+                        "\nYou punch in the code you found earlier. The hatch creaks open, revealing a dark tunnel. "
+                        "\nYou follow the tunnel, until it leads you to a control room, monitors, and a tape machine that clicks on. ")
                     print_slow(Fore.YELLOW + "\nTAPE: " + Style.RESET_ALL + "\nA voice plays...")
                     print_slow("\nField Test #1003. Subject has retained partial awareness. "
                                "\nIf you are hearing this, it means you survived long enough to find the exit again. "
@@ -663,11 +694,14 @@ def path4(name, inventory):
                         title="Field Test #1003",
                         subtitle="You built the forest to watch the monster. It learned to watch you back. The voice on the tape was your's. ",
                         color=Fore.YELLOW)
-                    
+
                 else:
                     print_slow("\nYou have no idea what the code is. You decide to leave the keypad alone. ")
             else:
                 print_slow("\nYou ignore the feeling of familiarity. Whatever is hidden here can stay hidden. ")
+
+        print_slow("\nThe cawing cuts out, the crows take flight, something else answers from the tress . ")
+        print_slow(Fore.RED + "\nIt steps out..." + Style.RESET_ALL + "\nThe pale eyes glint in the dark. ")
 
         # build action choices depending on items
         actions = []
@@ -678,7 +712,7 @@ def path4(name, inventory):
         actions.append("run")
 
         def pick_action():
-            return ask(f"\nIts starts approaching you. What do you do" + name + "? ({'/'.join(actions)}): ", inventory)
+            return ask(f"\nIts starts approaching you. What do you do {name}? ({'/'.join(actions)}): ", inventory)
 
         # choose action and run the corresponding outcome logic
         while True:
@@ -695,14 +729,16 @@ def path4(name, inventory):
 
             if act == "shard":
                 # detailed combat logic with random checks and multiple endings
-                print_slow("\nYou raise the Mirror Fragment. It's edge bites your palm, the blood flows across the shard. "
-                           "\nThe creature halts, recoiling from the sight of the bloodied glass. ")
-                damage_to_creature = ask("\nDo you stab it's eye or force the shard into it's pale eyes? (stab/force): ", inventory)
+                print_slow(
+                    "\nYou raise the Mirror Fragment. It's edge bites your palm, the blood flows across the shard. "
+                    "\nThe creature halts, recoiling from the sight of the bloodied glass. ")
+                damage_to_creature = ask(
+                    "\nDo you stab it's eye or force the shard into it's pale eyes? (stab/force): ", inventory)
                 if damage_to_creature not in {"stab", "force"}:
                     print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
                     continue
 
-                if damage_to_creature == "stab":                                                       
+                if damage_to_creature == "stab":
                     print_slow("\nYou lunge for the eye...")
                     kill_roll = random.random()
                     kill_chance = 0.65 - hand_penalty - fear_bonus
@@ -715,13 +751,13 @@ def path4(name, inventory):
                             title="Shattered Reflection",
                             subtitle="The shard buries deep. Dark fluid spills out. The creature collapses, twitching. It dissolves into a dark fluid.",
                             color=Fore.CYAN)
-                                                            
+
                     else:
                         injure_to_creature = (
-                        "\nYou slice it's cheek, the gash spills dark fluid. " 
-                        if not broken else    
-                        "\nYour grip stutters. The shard skims the cheek.")
-                        
+                            "\nYou slice it's cheek, the gash spills dark fluid. "
+                            if not broken else
+                            "\nYour grip stutters. The shard skims the cheek.")
+
                         print_slow(injure_to_creature)
                         drop_roll = random.random()
                         if drop_roll < (0.6 if broken else 0.3):
@@ -733,7 +769,7 @@ def path4(name, inventory):
                         finish_roll = random.random()
                         finish_chance = 0.5 - hand_penalty
                         if "Mirror Fragment" in inventory and finish_roll < finish_chance:
-                            glitch_text("S T I L L N E S S", flickers=6)                                
+                            glitch_text("S T I L L N E S S", flickers=6)
                             inventory.discard("Mirror Fragment")
                             return conclude_game(
                                 inventory,
@@ -741,7 +777,7 @@ def path4(name, inventory):
                                 title="Second Cut",
                                 subtitle="Not clean, not kind, just final. ",
                                 color=Fore.CYAN)
-                            
+
                         else:
                             print_slow("It staggers, enraged. You have to run. ")
                             escape_roll = random.random()
@@ -753,7 +789,7 @@ def path4(name, inventory):
                                     title="Bleeding Spirit",
                                     subtitle="You vanish into the trees, alive. ",
                                     color=Fore.BLUE)
-                                    
+
                             else:
                                 show_run_warning(duration=2)
                                 glitch_text("N O  P A T H", flickers=10)
@@ -763,7 +799,7 @@ def path4(name, inventory):
                                     title="Taken By The Shadows",
                                     subtitle="You run. The forest chooses whose breath will continue. ",
                                     color=Fore.RED)
-                                
+
 
                 elif damage_to_creature == "force":
                     # forcing the shard has another set of random outcomes
@@ -772,7 +808,8 @@ def path4(name, inventory):
                     reflect_chance = 0.5 - hand_penalty - fear_bonus
                     if reflect_roll < reflect_chance:
                         glitch_text("S", flickers=6)
-                        print_slow("\nThe shard shatters, the pieces stuck in it's face. It collapses, twitching. It dissolves into a dark fluid. ")
+                        print_slow(
+                            "\nThe shard shatters, the pieces stuck in it's face. It collapses, twitching. It dissolves into a dark fluid. ")
                         inventory.discard("Mirror Fragment")
                         return conclude_game(
                             inventory,
@@ -780,15 +817,16 @@ def path4(name, inventory):
                             title="Shattered Reflection",
                             subtitle="The shard buries deep. Dark fluid spills out. The creature collapses, twitching. It dissolves into a dark fluid.",
                             color=Fore.CYAN)
-                        
+
                     else:
                         print_slow("\nIt thrashes free, face slashed and bleeding. ")
                         if "Flare Gun" in inventory and "flare" in inventory:
-                            flare_gun = ask("\nDo you take the chance to shoot a flare at it or run? (shoot/run): ", inventory)
+                            flare_gun = ask("\nDo you take the chance to shoot a flare at it or run? (shoot/run): ",
+                                            inventory)
                             act = "flare" if flare_gun == "shoot" else "run"
                         else:
                             act = "run"
-                        
+
                         if act == "run":
                             show_run_warning(duration=3)
                             if random.random() < (0.6 - (0.15 if broken else 0.0)):
@@ -822,7 +860,7 @@ def path4(name, inventory):
                         title="Incineration",
                         subtitle="\nThe flare hits, searing into it's flesh. It howls, collapses, twitches. It dissolves into a dark fluid. ",
                         color=Fore.RED)
-                    
+
                 else:
                     print_slow("\nThe flare skims it's shoulder, It reels, blinded")
                     if "Mirror Fragment" in inventory:
@@ -887,17 +925,17 @@ def path4(name, inventory):
                         title="No Path",
                         subtitle="You run,it finds you in the dark.",
                         color=Fore.MAGENTA)
-                    
-                else:  
+
+                else:
                     glitch_text("N O  P A T H", flickers=10)
                     print_slow(Fore.RED + "\nENDING: " + Style.RESET_ALL + "You run,it finds you in the dark. ")
                     return conclude_game(
-                    inventory,
+                        inventory,
                         key="ENDING_TAKEN",
                         title="Taken in the Shadows",
                         subtitle="You run,it finds you in the dark.",
                         color=Fore.RED)
-                    
+
         return inventory
 
     else:
@@ -912,7 +950,6 @@ def path4(name, inventory):
                 break
             print(Fore.RED + "\nInvalid Input. Please type 'cut' or 'climb'." + Style.RESET_ALL)
 
-
         if rope_choice == "cut" and "pocket knife" in inventory:
             # cutting is simple if you have a pocket knife
             print_slow("\nYou cut through the rope. It snaps and coils in the dirt. ")
@@ -923,7 +960,7 @@ def path4(name, inventory):
                 show_run_warning(duration=2)
             else:
                 print_slow("\nYou climb the rope and drop down the other side. ")
-        
+
         print_slow("\nYou path descends into a cramped shaft. ")
         opts = []
         if "Mirror Fragment" in inventory: opts.append("shard")
@@ -931,7 +968,7 @@ def path4(name, inventory):
         opts.append("squeeze")
 
         while True:
-            crawls_after_you = ask(f"\nIt crawls after you. What do you do {name}? ({'/'.join(opts)}): ", inventory)  
+            crawls_after_you = ask(f"\nIt crawls after you. What do you do {name}? ({'/'.join(opts)}): ", inventory)
             if crawls_after_you not in opts:
                 print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
                 continue
@@ -943,7 +980,8 @@ def path4(name, inventory):
                 reflect_chance = 0.65 - hand_penalty
                 if reflect_roll < reflect_chance:
                     glitch_text("S P L I N T ER ", flickers=5)
-                    print_slow("\nThe shard shatters, the pieces stick in it's face. It collapses, twitching. It dissolves into a dark fluid. ")
+                    print_slow(
+                        "\nThe shard shatters, the pieces stick in it's face. It collapses, twitching. It dissolves into a dark fluid. ")
                     inventory.discard("Mirror Fragment")
                     return conclude_game(
                         inventory,
@@ -974,7 +1012,7 @@ def path4(name, inventory):
                         title="Incineration",
                         subtitle="The flare hits, searing into it's flesh. It howls, collapses, twitches. It dissolves into a dark fluid.",
                         color=Fore.RED)
-                    
+
                 else:
                     return conclude_game(
                         inventory,
@@ -985,7 +1023,8 @@ def path4(name, inventory):
 
             else:
                 # squeezing through leads to a safe escape ending
-                print_slow("\nYou force yourself through the tight space, ignoring the scraping and clawing behind you. ")
+                print_slow(
+                    "\nYou force yourself through the tight space, ignoring the scraping and clawing behind you. ")
                 print_slow("\nThe tunnel spits you out into a riverbed. Free. ")
                 return conclude_game(
                     inventory,
@@ -993,6 +1032,7 @@ def path4(name, inventory):
                     title="Thread The Needle",
                     subtitle="You live squeezing through. The night lets you pass.",
                     color=Fore.BLUE)
+
 
 def cave_scene(name, inventory):
     maybe_whisper(name, chance=0.5)
@@ -1032,6 +1072,7 @@ def cave_scene(name, inventory):
     print_slow("\nYou retreat toward's the caves entrance.")
     return inventory
 
+
 def cave_scene2(name, inventory):
     print_slow("\nYou drag yourself along the current of the river, soaked and shivering.")
     print_slow("\nYou follow the current, hoping it might lead you out of the Mori Forest.")
@@ -1054,7 +1095,7 @@ def cave_scene2(name, inventory):
         else:
             print_slow("\nOnly dust remains in the box. ")
     elif open_box == "no":
-            print_slow("\nYou leave the box shut. ")
+        print_slow("\nYou leave the box shut. ")
     else:
         print_slow(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
 
@@ -1075,7 +1116,8 @@ def cave_scene2(name, inventory):
 
     if "Lighted Lantern" in inventory:
         # lighted lantern reveals a map that points to Mill Tunnel
-        print_slow("\nWith the lamp you delve deeper into the farmhouse, through the eerie hall, which leads you to discover an old office.")
+        print_slow(
+            "\nWith the lamp you delve deeper into the farmhouse, through the eerie hall, which leads you to discover an old office.")
         print_slow("\nEntering the office with the luminous lantern reveals a desk. "
                    "Inside the desk you find a odd map. ")
         if "map" not in inventory:
@@ -1098,6 +1140,7 @@ def cave_scene2(name, inventory):
     inventory = path4(name, inventory)
     return inventory
 
+
 def mill_tunnel(name, inventory):
     print_slow("\nFollowing the map's trail. ")
     sign = ask("\nYou see a fallen sign. Do you read it? (yes/no): ", inventory)
@@ -1116,7 +1159,7 @@ def mill_tunnel(name, inventory):
                "\nThe passage narrows."
                "\nA corroded warning plate on the wall."
                "\nYou read it. ")
-    print_slow(Fore.RED + "DO N.T DESCEND D.WN. FL..R WE.GHT IS UN.TA..." + Style.RESET_ALL)        #UNSTABLE
+    print_slow(Fore.RED + "DO N.T DESCEND D.WN. FL..R WE.GHT IS UN.TA..." + Style.RESET_ALL)  # UNSTABLE
     print_slow("\nYou move deeper until the floor changes from new to old rotted planks. "
                "\nSome planks look soaked and soft. ")
 
@@ -1131,7 +1174,7 @@ def mill_tunnel(name, inventory):
                        "\nYou jump to the small opening and start to crawl out, at the end you fall out."
                        "\nYou get up and start following a path next to the opening."
                        "\nIt leads you to two paths. ")
-            inventory = path4(name,inventory)
+            inventory = path4(name, inventory)
             return inventory
 
         elif trap1 == "middle":
@@ -1141,7 +1184,8 @@ def mill_tunnel(name, inventory):
             break
 
         elif trap1 == "right":
-            print_slow("\nThe right edge seems to be weak. You balance yourself and stay on the left side and make it across. ")
+            print_slow(
+                "\nThe right edge seems to be weak. You balance yourself and stay on the left side and make it across. ")
             break
 
         else:
@@ -1155,9 +1199,9 @@ def mill_tunnel(name, inventory):
     while True:
         trap2 = ask("What do you do? (jump/crawl): ", inventory)
         if trap2 == "crawl":
-                print_slow("\nYou crawl under the wire, your back scrapes it. The wire doesnt set anything off. "
-                           "\nThe path ahead is clear. ")
-                break
+            print_slow("\nYou crawl under the wire, your back scrapes it. The wire doesnt set anything off. "
+                       "\nThe path ahead is clear. ")
+            break
         elif trap2 == "jump":
             if "broken left hand" in inventory:
                 # injured players are more likely to trigger collapse
@@ -1173,7 +1217,7 @@ def mill_tunnel(name, inventory):
                            "\nYou jump to the small opening and start to crawl out, at the end you fall out."
                            "\nYou get up and start following a path next to the opening."
                            "\nIt leads you to two paths.")
-                inventory = path4(name,inventory)
+                inventory = path4(name, inventory)
                 return inventory
 
             else:
@@ -1195,8 +1239,8 @@ def mill_tunnel(name, inventory):
 
     # pattern hints printed to the player; correct pattern is the first column of rows
     pattern = [["SILENCE", "TIME", "DARKNESS"],
-                ["DARKNESS", "SILENCE", "TIME"],
-                ["TIME", "DARKNESS", "SILENCE"]]
+               ["DARKNESS", "SILENCE", "TIME"],
+               ["TIME", "DARKNESS", "SILENCE"]]
 
     print_slow(Fore.RED + f"\nThe runes glow: {pattern[0]}... {pattern[1]}...{pattern[2]}..." + Style.RESET_ALL)
     time.sleep(2)
@@ -1228,10 +1272,11 @@ def mill_tunnel(name, inventory):
         else:
             print_slow("\nThe supply room has already been scavenged. Nothing more to take here.")
 
-        print_slow("\nYou secure your new item and head through a passage that looks to be leading you out of the Mill Tunnel."
-                   "\nYou make it out safely."
-                   "\nYou start to head down a path near the exit which leads you to two paths. ")
-        inventory = path4(name,inventory)
+        print_slow(
+            "\nYou secure your new item and head through a passage that looks to be leading you out of the Mill Tunnel."
+            "\nYou make it out safely."
+            "\nYou start to head down a path near the exit which leads you to two paths. ")
+        inventory = path4(name, inventory)
         return inventory
 
     else:
@@ -1244,8 +1289,9 @@ def mill_tunnel(name, inventory):
                    "\nYou jump to the small opening and start to crawl out, at the end you fall out."
                    "\nYou get up and start following a path next to the opening."
                    "\nIt leads you to two paths. ")
-        inventory = path4(name,inventory)
+        inventory = path4(name, inventory)
         return inventory
+
 
 if __name__ == "__main__":
     # run the game when this file is executed directly

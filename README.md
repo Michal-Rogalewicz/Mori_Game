@@ -58,7 +58,3 @@ Inside `mori_3.py`:
 ## Adding to the story
 
 The game is built from simple functions and an inventory `set`, so it's easy to extend: add a new scene function, give it a choice with `ask()`, and use `inventory.add(...)` / `"item" in inventory` to make choices matter.
-
-## Author
-
-Created by Michal Rogalewicz as a coding project.
